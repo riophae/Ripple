@@ -506,7 +506,7 @@ Ripple.helpers.UUID = (function() {
 			uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
 			uuid[14] = '4';
 
-			// Fill in random data.  At i==19 set the high bits of clock sequence as
+			// Fill in random data.	At i==19 set the high bits of clock sequence as
 			// per rfc4122, sec. 4.1.5
 			for (var i = 0; i < 36; i++) {
 				if (! uuid[i]) {
@@ -541,9 +541,9 @@ Ripple.helpers.isUUID = function(val) {
  * Configurable variables. You may need to tweak these to be compatible with
  * the server-side, but the defaults work in most cases.
  */
-var hexcase = 0;  /* hex output format. 0 - lowercase; 1 - uppercase        */
-var b64pad  = ''; /* base-64 pad character. '=' for strict RFC compliance   */
-var chrsz   = 8;  /* bits per input character. 8 - ASCII; 16 - Unicode      */
+var hexcase = 0;	/* hex output format. 0 - lowercase; 1 - uppercase				*/
+var b64pad	= ''; /* base-64 pad character. '=' for strict RFC compliance	 */
+var chrsz	 = 8;	/* bits per input character. 8 - ASCII; 16 - Unicode			*/
 
 /*
  * These are the functions you'll usually want to call
@@ -560,50 +560,50 @@ function str_hmac_sha1(key, data) { return binb2str(core_hmac_sha1(key, data)); 
  * Perform a simple self-test to see if the VM is working
  */
 function sha1_vm_test() {
-  return hex_sha1('abc') == 'a9993e364706816aba3e25717850c26c9cd0d89d';
+	return hex_sha1('abc') == 'a9993e364706816aba3e25717850c26c9cd0d89d';
 }
 
 /*
  * Calculate the SHA-1 of an array of big-endian words, and a bit length
  */
 function core_sha1(x, len) {
-  /* append padding */
-  x[len >> 5] |= 0x80 << (24 - len % 32);
-  x[((len + 64 >> 9) << 4) + 15] = len;
+	/* append padding */
+	x[len >> 5] |= 0x80 << (24 - len % 32);
+	x[((len + 64 >> 9) << 4) + 15] = len;
 
-  var w = Array(80);
-  var a =  1732584193;
-  var b = -271733879;
-  var c = -1732584194;
-  var d =  271733878;
-  var e = -1009589776;
+	var w = Array(80);
+	var a =	1732584193;
+	var b = -271733879;
+	var c = -1732584194;
+	var d =	271733878;
+	var e = -1009589776;
 
-  for(var i = 0; i < x.length; i += 16) {
-    var olda = a;
-    var oldb = b;
-    var oldc = c;
-    var oldd = d;
-    var olde = e;
+	for(var i = 0; i < x.length; i += 16) {
+		var olda = a;
+		var oldb = b;
+		var oldc = c;
+		var oldd = d;
+		var olde = e;
 
-    for(var j = 0; j < 80; j++) {
-      if(j < 16) w[j] = x[i + j];
-      else w[j] = rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
-      var t = safe_add(safe_add(rol(a, 5), sha1_ft(j, b, c, d)),
-                       safe_add(safe_add(e, w[j]), sha1_kt(j)));
-      e = d;
-      d = c;
-      c = rol(b, 30);
-      b = a;
-      a = t;
-    }
+		for(var j = 0; j < 80; j++) {
+			if(j < 16) w[j] = x[i + j];
+			else w[j] = rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
+			var t = safe_add(safe_add(rol(a, 5), sha1_ft(j, b, c, d)),
+											 safe_add(safe_add(e, w[j]), sha1_kt(j)));
+			e = d;
+			d = c;
+			c = rol(b, 30);
+			b = a;
+			a = t;
+		}
 
-    a = safe_add(a, olda);
-    b = safe_add(b, oldb);
-    c = safe_add(c, oldc);
-    d = safe_add(d, oldd);
-    e = safe_add(e, olde);
-  }
-  return Array(a, b, c, d, e);
+		a = safe_add(a, olda);
+		b = safe_add(b, oldb);
+		c = safe_add(c, oldc);
+		d = safe_add(d, oldd);
+		e = safe_add(e, olde);
+	}
+	return Array(a, b, c, d, e);
 
 }
 
@@ -612,35 +612,35 @@ function core_sha1(x, len) {
  * iteration
  */
 function sha1_ft(t, b, c, d) {
-  if(t < 20) return (b & c) | ((~b) & d);
-  if(t < 40) return b ^ c ^ d;
-  if(t < 60) return (b & c) | (b & d) | (c & d);
-  return b ^ c ^ d;
+	if(t < 20) return (b & c) | ((~b) & d);
+	if(t < 40) return b ^ c ^ d;
+	if(t < 60) return (b & c) | (b & d) | (c & d);
+	return b ^ c ^ d;
 }
 
 /*
  * Determine the appropriate additive constant for the current iteration
  */
 function sha1_kt(t) {
-  return (t < 20) ?  1518500249 : (t < 40) ?  1859775393 :
-         (t < 60) ? -1894007588 : -899497514;
+	return (t < 20) ?	1518500249 : (t < 40) ?	1859775393 :
+				 (t < 60) ? -1894007588 : -899497514;
 }
 
 /*
  * Calculate the HMAC-SHA1 of a key and some data
  */
 function core_hmac_sha1(key, data) {
-  var bkey = str2binb(key);
-  if(bkey.length > 16) bkey = core_sha1(bkey, key.length * chrsz);
+	var bkey = str2binb(key);
+	if(bkey.length > 16) bkey = core_sha1(bkey, key.length * chrsz);
 
-  var ipad = Array(16), opad = Array(16);
-  for(var i = 0; i < 16; i++) {
-    ipad[i] = bkey[i] ^ 0x36363636;
-    opad[i] = bkey[i] ^ 0x5C5C5C5C;
-  }
+	var ipad = Array(16), opad = Array(16);
+	for(var i = 0; i < 16; i++) {
+		ipad[i] = bkey[i] ^ 0x36363636;
+		opad[i] = bkey[i] ^ 0x5C5C5C5C;
+	}
 
-  var hash = core_sha1(ipad.concat(str2binb(data)), 512 + data.length * chrsz);
-  return core_sha1(opad.concat(hash), 512 + 160);
+	var hash = core_sha1(ipad.concat(str2binb(data)), 512 + data.length * chrsz);
+	return core_sha1(opad.concat(hash), 512 + 160);
 }
 
 /*
@@ -648,16 +648,16 @@ function core_hmac_sha1(key, data) {
  * to work around bugs in some JS interpreters.
  */
 function safe_add(x, y) {
-  var lsw = (x & 0xFFFF) + (y & 0xFFFF);
-  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-  return (msw << 16) | (lsw & 0xFFFF);
+	var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+	var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+	return (msw << 16) | (lsw & 0xFFFF);
 }
 
 /*
  * Bitwise rotate a 32-bit number to the left.
  */
 function rol(num, cnt) {
-  return (num << cnt) | (num >>> (32 - cnt));
+	return (num << cnt) | (num >>> (32 - cnt));
 }
 
 /*
@@ -665,53 +665,53 @@ function rol(num, cnt) {
  * In 8-bit function, characters >255 have their hi-byte silently ignored.
  */
 function str2binb(str) {
-  var bin = Array();
-  var mask = (1 << chrsz) - 1;
-  for(var i = 0; i < str.length * chrsz; i += chrsz)
-    bin[i>>5] |= (str.charCodeAt(i / chrsz) & mask) << (32 - chrsz - i%32);
-  return bin;
+	var bin = Array();
+	var mask = (1 << chrsz) - 1;
+	for(var i = 0; i < str.length * chrsz; i += chrsz)
+		bin[i>>5] |= (str.charCodeAt(i / chrsz) & mask) << (32 - chrsz - i%32);
+	return bin;
 }
 
 /*
  * Convert an array of big-endian words to a string
  */
 function binb2str(bin) {
-  var str = '';
-  var mask = (1 << chrsz) - 1;
-  for(var i = 0; i < bin.length * 32; i += chrsz)
-    str += String.fromCharCode((bin[i>>5] >>> (32 - chrsz - i%32)) & mask);
-  return str;
+	var str = '';
+	var mask = (1 << chrsz) - 1;
+	for(var i = 0; i < bin.length * 32; i += chrsz)
+		str += String.fromCharCode((bin[i>>5] >>> (32 - chrsz - i%32)) & mask);
+	return str;
 }
 
 /*
  * Convert an array of big-endian words to a hex string.
  */
 function binb2hex(binarray) {
-  var hex_tab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef';
-  var str = '';
-  for(var i = 0; i < binarray.length * 4; i++) {
-    str += hex_tab.charAt((binarray[i>>2] >> ((3 - i%4)*8+4)) & 0xF) +
-           hex_tab.charAt((binarray[i>>2] >> ((3 - i%4)*8  )) & 0xF);
-  }
-  return str;
+	var hex_tab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef';
+	var str = '';
+	for(var i = 0; i < binarray.length * 4; i++) {
+		str += hex_tab.charAt((binarray[i>>2] >> ((3 - i%4)*8+4)) & 0xF) +
+					 hex_tab.charAt((binarray[i>>2] >> ((3 - i%4)*8	)) & 0xF);
+	}
+	return str;
 }
 
 /*
  * Convert an array of big-endian words to a base-64 string
  */
 function binb2b64(binarray) {
-  var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  var str = '';
-  for(var i = 0; i < binarray.length * 4; i += 3) {
-    var triplet = (((binarray[i   >> 2] >> 8 * (3 -  i   %4)) & 0xFF) << 16)
-                | (((binarray[i+1 >> 2] >> 8 * (3 - (i+1)%4)) & 0xFF) << 8 )
-                |  ((binarray[i+2 >> 2] >> 8 * (3 - (i+2)%4)) & 0xFF);
-    for(var j = 0; j < 4; j++) {
-      if(i * 8 + j * 6 > binarray.length * 32) str += b64pad;
-      else str += tab.charAt((triplet >> 6*(3-j)) & 0x3F);
-    }
-  }
-  return str;
+	var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	var str = '';
+	for(var i = 0; i < binarray.length * 4; i += 3) {
+		var triplet = (((binarray[i	 >> 2] >> 8 * (3 -	i	 %4)) & 0xFF) << 16)
+								| (((binarray[i+1 >> 2] >> 8 * (3 - (i+1)%4)) & 0xFF) << 8 )
+								|	((binarray[i+2 >> 2] >> 8 * (3 - (i+2)%4)) & 0xFF);
+		for(var j = 0; j < 4; j++) {
+			if(i * 8 + j * 6 > binarray.length * 32) str += b64pad;
+			else str += tab.charAt((triplet >> 6*(3-j)) & 0x3F);
+		}
+	}
+	return str;
 }
 
 
@@ -965,7 +965,7 @@ Ripple.helpers.generateTimeFormater = function(func) {
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *			 http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -980,248 +980,248 @@ Ripple.helpers.generateTimeFormater = function(func) {
 ;;;(function(Global) {
 var lscache = Ripple.cache = function() {
 
-  // Prefix for all lscache keys
-  var CACHE_PREFIX = 'lscache-';
+	// Prefix for all lscache keys
+	var CACHE_PREFIX = 'lscache-';
 
-  // Suffix for the key name on the expiration items in localStorage
-  var CACHE_SUFFIX = '-cacheexpiration';
+	// Suffix for the key name on the expiration items in localStorage
+	var CACHE_SUFFIX = '-cacheexpiration';
 
-  // expiration date radix (set to Base-36 for most space savings)
-  var EXPIRY_RADIX = 10;
+	// expiration date radix (set to Base-36 for most space savings)
+	var EXPIRY_RADIX = 10;
 
-  // time resolution in minutes
-  var EXPIRY_UNITS = 60 * 1000;
+	// time resolution in minutes
+	var EXPIRY_UNITS = 60 * 1000;
 
-  // ECMAScript max Date (epoch + 1e8 days)
-  var MAX_DATE = Math.floor(8.64e15/EXPIRY_UNITS);
+	// ECMAScript max Date (epoch + 1e8 days)
+	var MAX_DATE = Math.floor(8.64e15/EXPIRY_UNITS);
 
-  var cachedStorage;
-  var cachedJSON;
+	var cachedStorage;
+	var cachedJSON;
 
-  // Determines if localStorage is supported in the browser;
-  // result is cached for better performance instead of being run each time.
-  // Feature detection is based on how Modernizr does it;
-  // it's not straightforward due to FF4 issues.
-  // It's not run at parse-time as it takes 200ms in Android.
-  function supportsStorage() {
-    var key = '__lscachetest__';
-    var value = key;
+	// Determines if localStorage is supported in the browser;
+	// result is cached for better performance instead of being run each time.
+	// Feature detection is based on how Modernizr does it;
+	// it's not straightforward due to FF4 issues.
+	// It's not run at parse-time as it takes 200ms in Android.
+	function supportsStorage() {
+		var key = '__lscachetest__';
+		var value = key;
 
-    if (cachedStorage !== undefined) {
-      return cachedStorage;
-    }
+		if (cachedStorage !== undefined) {
+			return cachedStorage;
+		}
 
-    try {
-      setItem(key, value);
-      removeItem(key);
-      cachedStorage = true;
-    } catch (exc) {
-      cachedStorage = false;
-    }
-    return cachedStorage;
-  }
+		try {
+			setItem(key, value);
+			removeItem(key);
+			cachedStorage = true;
+		} catch (exc) {
+			cachedStorage = false;
+		}
+		return cachedStorage;
+	}
 
-  // Determines if native JSON (de-)serialization is supported in the browser.
-  function supportsJSON() {
-    /*jshint eqnull:true */
-    if (cachedJSON === undefined) {
-      cachedJSON = (window.JSON != null);
-    }
-    return cachedJSON;
-  }
+	// Determines if native JSON (de-)serialization is supported in the browser.
+	function supportsJSON() {
+		/*jshint eqnull:true */
+		if (cachedJSON === undefined) {
+			cachedJSON = (window.JSON != null);
+		}
+		return cachedJSON;
+	}
 
-  /**
-   * Returns the full string for the localStorage expiration item.
-   * @param {String} key
-   * @return {string}
-   */
-  function expirationKey(key) {
-    return key + CACHE_SUFFIX;
-  }
+	/**
+	 * Returns the full string for the localStorage expiration item.
+	 * @param {String} key
+	 * @return {string}
+	 */
+	function expirationKey(key) {
+		return key + CACHE_SUFFIX;
+	}
 
-  /**
-   * Returns the number of minutes since the epoch.
-   * @return {number}
-   */
-  function currentTime() {
-    return Math.floor((new Date().getTime())/EXPIRY_UNITS);
-  }
+	/**
+	 * Returns the number of minutes since the epoch.
+	 * @return {number}
+	 */
+	function currentTime() {
+		return Math.floor((new Date().getTime())/EXPIRY_UNITS);
+	}
 
-  /**
-   * Wrapper functions for localStorage methods
-   */
+	/**
+	 * Wrapper functions for localStorage methods
+	 */
 
-  function getItem(key) {
-    return localStorage.getItem(CACHE_PREFIX + key);
-  }
+	function getItem(key) {
+		return localStorage.getItem(CACHE_PREFIX + key);
+	}
 
-  function setItem(key, value) {
-    // Fix for iPad issue - sometimes throws QUOTA_EXCEEDED_ERR on setItem.
-    localStorage.removeItem(CACHE_PREFIX + key);
-    localStorage.setItem(CACHE_PREFIX + key, value);
-  }
+	function setItem(key, value) {
+		// Fix for iPad issue - sometimes throws QUOTA_EXCEEDED_ERR on setItem.
+		localStorage.removeItem(CACHE_PREFIX + key);
+		localStorage.setItem(CACHE_PREFIX + key, value);
+	}
 
-  function removeItem(key) {
-    localStorage.removeItem(CACHE_PREFIX + key);
-  }
+	function removeItem(key) {
+		localStorage.removeItem(CACHE_PREFIX + key);
+	}
 
-  return {
+	return {
 
-    /**
-     * Stores the value in localStorage. Expires after specified number of minutes.
-     * @param {string} key
-     * @param {Object|string} value
-     * @param {number} time
-     */
-    set: function(key, value, time) {
-      if (!supportsStorage()) return;
+		/**
+		 * Stores the value in localStorage. Expires after specified number of minutes.
+		 * @param {string} key
+		 * @param {Object|string} value
+		 * @param {number} time
+		 */
+		set: function(key, value, time) {
+			if (!supportsStorage()) return;
 
-      // If we don't get a string value, try to stringify
-      // In future, localStorage may properly support storing non-strings
-      // and this can be removed.
-      if (typeof value !== 'string') {
-        if (!supportsJSON()) return;
-        try {
-          value = JSON.stringify(value);
-        } catch (e) {
-          // Sometimes we can't stringify due to circular refs
-          // in complex objects, so we won't bother storing then.
-          return;
-        }
-      }
+			// If we don't get a string value, try to stringify
+			// In future, localStorage may properly support storing non-strings
+			// and this can be removed.
+			if (typeof value !== 'string') {
+				if (!supportsJSON()) return;
+				try {
+					value = JSON.stringify(value);
+				} catch (e) {
+					// Sometimes we can't stringify due to circular refs
+					// in complex objects, so we won't bother storing then.
+					return;
+				}
+			}
 
-      try {
-        setItem(key, value);
-      } catch (e) {
-        if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-          // If we exceeded the quota, then we will sort
-          // by the expire time, and then remove the N oldest
-          var storedKeys = [];
-          var storedKey;
-          for (var i = 0; i < localStorage.length; i++) {
-            storedKey = localStorage.key(i);
+			try {
+				setItem(key, value);
+			} catch (e) {
+				if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+					// If we exceeded the quota, then we will sort
+					// by the expire time, and then remove the N oldest
+					var storedKeys = [];
+					var storedKey;
+					for (var i = 0; i < localStorage.length; i++) {
+						storedKey = localStorage.key(i);
 
-            if (storedKey.indexOf(CACHE_PREFIX) === 0 && storedKey.indexOf(CACHE_SUFFIX) < 0) {
-              var mainKey = storedKey.substr(CACHE_PREFIX.length);
-              var exprKey = expirationKey(mainKey);
-              var expiration = getItem(exprKey);
-              if (expiration) {
-                expiration = parseInt(expiration, EXPIRY_RADIX);
-              } else {
-                // TODO: Store date added for non-expiring items for smarter removal
-                expiration = MAX_DATE;
-              }
-              storedKeys.push({
-                key: mainKey,
-                size: (getItem(mainKey)||'').length,
-                expiration: expiration
-              });
-            }
-          }
-          // Sorts the keys with oldest expiration time last
-          storedKeys.sort(function(a, b) { return (b.expiration-a.expiration); });
+						if (storedKey.indexOf(CACHE_PREFIX) === 0 && storedKey.indexOf(CACHE_SUFFIX) < 0) {
+							var mainKey = storedKey.substr(CACHE_PREFIX.length);
+							var exprKey = expirationKey(mainKey);
+							var expiration = getItem(exprKey);
+							if (expiration) {
+								expiration = parseInt(expiration, EXPIRY_RADIX);
+							} else {
+								// TODO: Store date added for non-expiring items for smarter removal
+								expiration = MAX_DATE;
+							}
+							storedKeys.push({
+								key: mainKey,
+								size: (getItem(mainKey)||'').length,
+								expiration: expiration
+							});
+						}
+					}
+					// Sorts the keys with oldest expiration time last
+					storedKeys.sort(function(a, b) { return (b.expiration-a.expiration); });
 
-          var targetSize = (value||'').length;
-          while (storedKeys.length && targetSize > 0) {
-            storedKey = storedKeys.pop();
-            removeItem(storedKey.key);
-            removeItem(expirationKey(storedKey.key));
-            targetSize -= storedKey.size;
-          }
-          try {
-            setItem(key, value);
-          } catch (e) {
-            // value may be larger than total quota
-            return;
-          }
-        } else {
-          // If it was some other error, just give up.
-          return;
-        }
-      }
+					var targetSize = (value||'').length;
+					while (storedKeys.length && targetSize > 0) {
+						storedKey = storedKeys.pop();
+						removeItem(storedKey.key);
+						removeItem(expirationKey(storedKey.key));
+						targetSize -= storedKey.size;
+					}
+					try {
+						setItem(key, value);
+					} catch (e) {
+						// value may be larger than total quota
+						return;
+					}
+				} else {
+					// If it was some other error, just give up.
+					return;
+				}
+			}
 
-      // If a time is specified, store expiration info in localStorage
-      if (time) {
-        setItem(expirationKey(key), (currentTime() + time).toString(EXPIRY_RADIX));
-      } else {
-        // In case they previously set a time, remove that info from localStorage.
-        removeItem(expirationKey(key));
-      }
-    },
+			// If a time is specified, store expiration info in localStorage
+			if (time) {
+				setItem(expirationKey(key), (currentTime() + time).toString(EXPIRY_RADIX));
+			} else {
+				// In case they previously set a time, remove that info from localStorage.
+				removeItem(expirationKey(key));
+			}
+		},
 
-    /**
-     * Retrieves specified value from localStorage, if not expired.
-     * @param {string} key
-     * @return {string|Object}
-     */
-    get: function(key) {
-      if (!supportsStorage()) return null;
+		/**
+		 * Retrieves specified value from localStorage, if not expired.
+		 * @param {string} key
+		 * @return {string|Object}
+		 */
+		get: function(key) {
+			if (!supportsStorage()) return null;
 
-      // Return the de-serialized item if not expired
-      var exprKey = expirationKey(key);
-      var expr = getItem(exprKey);
+			// Return the de-serialized item if not expired
+			var exprKey = expirationKey(key);
+			var expr = getItem(exprKey);
 
-      if (expr) {
-        var expirationTime = parseInt(expr, EXPIRY_RADIX);
+			if (expr) {
+				var expirationTime = parseInt(expr, EXPIRY_RADIX);
 
-        // Check if we should actually kick item out of storage
-        if (currentTime() >= expirationTime) {
-          removeItem(key);
-          removeItem(exprKey);
-          return null;
-        }
-      }
+				// Check if we should actually kick item out of storage
+				if (currentTime() >= expirationTime) {
+					removeItem(key);
+					removeItem(exprKey);
+					return null;
+				}
+			}
 
-      // Tries to de-serialize stored value if its an object, and returns the normal value otherwise.
-      var value = getItem(key);
-      if (!value || !supportsJSON()) {
-        return value;
-      }
+			// Tries to de-serialize stored value if its an object, and returns the normal value otherwise.
+			var value = getItem(key);
+			if (!value || !supportsJSON()) {
+				return value;
+			}
 
-      try {
-        // We can't tell if its JSON or a string, so we try to parse
-        return JSON.parse(value);
-      } catch (e) {
-        // If we can't parse, it's probably because it isn't an object
-        return value;
-      }
-    },
+			try {
+				// We can't tell if its JSON or a string, so we try to parse
+				return JSON.parse(value);
+			} catch (e) {
+				// If we can't parse, it's probably because it isn't an object
+				return value;
+			}
+		},
 
-    /**
-     * Removes a value from localStorage.
-     * Equivalent to 'delete' in memcache, but that's a keyword in JS.
-     * @param {string} key
-     */
-    remove: function(key) {
-      if (!supportsStorage()) return null;
-      removeItem(key);
-      removeItem(expirationKey(key));
-    },
+		/**
+		 * Removes a value from localStorage.
+		 * Equivalent to 'delete' in memcache, but that's a keyword in JS.
+		 * @param {string} key
+		 */
+		remove: function(key) {
+			if (!supportsStorage()) return null;
+			removeItem(key);
+			removeItem(expirationKey(key));
+		},
 
-    /**
-     * Returns whether local storage is supported.
-     * Currently exposed for testing purposes.
-     * @return {boolean}
-     */
-    supported: function() {
-      return supportsStorage();
-    },
+		/**
+		 * Returns whether local storage is supported.
+		 * Currently exposed for testing purposes.
+		 * @return {boolean}
+		 */
+		supported: function() {
+			return supportsStorage();
+		},
 
-    /**
-     * Flushes all lscache items and expiry markers without affecting rest of localStorage
-     */
-    flush: function() {
-      if (!supportsStorage()) return;
+		/**
+		 * Flushes all lscache items and expiry markers without affecting rest of localStorage
+		 */
+		flush: function() {
+			if (!supportsStorage()) return;
 
-      // Loop in reverse as removing items will change indices of tail
-      for (var i = localStorage.length-1; i >= 0 ; --i) {
-        var key = localStorage.key(i);
-        if (key.indexOf(CACHE_PREFIX) === 0) {
-          localStorage.removeItem(key);
-        }
-      }
-    }
-  };
+			// Loop in reverse as removing items will change indices of tail
+			for (var i = localStorage.length-1; i >= 0 ; --i) {
+				var key = localStorage.key(i);
+				if (key.indexOf(CACHE_PREFIX) === 0) {
+					localStorage.removeItem(key);
+				}
+			}
+		}
+	};
 }();
 
 if (Global.lscache === undefined) {
@@ -1307,266 +1307,266 @@ if (Global.lscache === undefined) {
 var OAuth = Ripple.OAuth = {};
 
 OAuth.setProperties = function(into, from) {
-  if (into != null && from != null) {
-    for (var key in from) {
-      into[key] = from[key];
-    }
-  }
-  return into;
+	if (into != null && from != null) {
+		for (var key in from) {
+			into[key] = from[key];
+		}
+	}
+	return into;
 }
 
 // Utility Functions
 OAuth.setProperties(OAuth, {
-  percentEncode: function(s) {
-    if (! s) {
-      return '';
-    }
-    if (s instanceof Array) {
-      var e = '';
-      for (var i = 0, len = s.length; i < len; i++) {
-        if (e) e += '&';
-        e += OAuth.percentEncode(s[i]);
-      }
-      return e;
-    }
-    s = encodeURIComponent(s);
-    // Now replace the values which encodeURIComponent doesn't do
-    // encodeURIComponent ignores: - _ . ! ~ * ' ( )
-    // OAuth dictates the only ones you can ignore are: - _ . ~
-    // Source: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Functions:encodeURIComponent
-    s = s.replace(/\!/g, '%21')
-         .replace(/\*/g, '%2A')
-         .replace(/\'/g, '%27')
-         .replace(/\(/g, '%28')
-         .replace(/\)/g, '%29');
-    return s;
-  },
-  decodePercent: function(s) {
-    if (s) {
-      // Handle application/x-www-form-urlencoded, which is defined by
-      // http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1
-      s = s.replace(/\+/g, ' ');
-    }
-    return decodeURIComponent(s);
-  },
-  /** Convert the given parameters to an Array of name-value pairs. */
-  getParameterList: function(parameters) {
-    if (! parameters) {
-      return [];
-    }
-    if (typeof parameters != 'object') {
-      return OAuth.decodeForm(parameters + '');
-    }
-    if (parameters instanceof Array) {
-      return parameters;
-    }
-    var list = [];
-    for (var p in parameters) {
-      list.push([p, parameters[p]]);
-    }
-    return list;
-  },
-  /** Convert the given parameters to a map from name to value. */
-  getParameterMap: function(parameters) {
-    if (! parameters) {
-      return {};
-    }
-    if (typeof parameters != 'object') {
-      return OAuth.getParameterMap(OAuth.decodeForm(parameters + ''));
-    }
-    if (parameters instanceof Array) {
-      var map = {};
-      for (var p = 0, len = parameters.length; p < len; ++p) {
-        var key = parameters[p][0];
-        if (map[key] === undefined) { // first value wins
-          map[key] = parameters[p][1];
-        }
-      }
-      return map;
-    }
-    return parameters;
-  },
-  getParameter: function(parameters, name) {
-    if (parameters instanceof Array) {
-      for (var p = 0, len = parameters.length; p < len; ++p) {
-        if (parameters[p][0] == name) {
-          return parameters[p][1]; // first value wins
-        }
-      }
-    } else {
-      return OAuth.getParameterMap(parameters)[name];
-    }
-    return null;
-  },
-  formEncode: function(parameters) {
-    var form = '';
-    var list = OAuth.getParameterList(parameters);
-    for (var p = 0, len = list.length; p < len; ++p) {
-      var value = list[p][1];
-      if (value == null) value = '';
-      if (form != '') form += '&';
-      form += OAuth.percentEncode(list[p][0])
-        + '=' + OAuth.percentEncode(value);
-    }
-    return form;
-  },
-  decodeForm: function(form) {
-    var list = [];
-    var nvps = form.split('&');
-    for (var n = 0, len = nvps.length; n < len; ++n) {
-      var nvp = nvps[n];
-      if (nvp == '') {
-        continue;
-      }
-      var equals = nvp.indexOf('=');
-      var name, value;
-      if (equals < 0) {
-        name = OAuth.decodePercent(nvp);
-        value = null;
-      } else {
-        name = OAuth.decodePercent(nvp.substring(0, equals));
-        value = OAuth.decodePercent(nvp.substring(equals + 1));
-      }
-      list.push([name, value]);
-    }
-    return list;
-  },
-  setParameter: function(message, name, value) {
-    var parameters = message.parameters;
-    if (parameters instanceof Array) {
-      for (var p = 0; p < parameters.length; ++p) {
-        if (parameters[p][0] == name) {
-          if (value === undefined) {
-            parameters.splice(p, 1);
-          } else {
-            parameters[p][1] = value;
-            value = undefined;
-          }
-        }
-      }
-      if (value !== undefined) {
-        parameters.push([name, value]);
-      }
-    } else {
-      parameters = OAuth.getParameterMap(parameters);
-      parameters[name] = value;
-      message.parameters = parameters;
-    }
-  },
-  setParameters: function(message, parameters) {
-    var list = OAuth.getParameterList(parameters);
-    for (var i = 0, len = list.length; i < len; ++i) {
-      OAuth.setParameter(message, list[i][0], list[i][1]);
-    }
-  },
-  /** Fill in parameters to help construct a request message.
-    This function doesn't fill in every parameter.
-    The accessor object should be like:
-    {consumerKey:'foo', consumerSecret:'bar', accessorSecret:'nurn', token:'krelm', tokenSecret:'blah'}
-    The accessorSecret property is optional.
-   */
-  completeRequest: function(message, accessor) {
+	percentEncode: function(s) {
+		if (! s) {
+			return '';
+		}
+		if (s instanceof Array) {
+			var e = '';
+			for (var i = 0, len = s.length; i < len; i++) {
+				if (e) e += '&';
+				e += OAuth.percentEncode(s[i]);
+			}
+			return e;
+		}
+		s = encodeURIComponent(s);
+		// Now replace the values which encodeURIComponent doesn't do
+		// encodeURIComponent ignores: - _ . ! ~ * ' ( )
+		// OAuth dictates the only ones you can ignore are: - _ . ~
+		// Source: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Functions:encodeURIComponent
+		s = s.replace(/\!/g, '%21')
+				 .replace(/\*/g, '%2A')
+				 .replace(/\'/g, '%27')
+				 .replace(/\(/g, '%28')
+				 .replace(/\)/g, '%29');
+		return s;
+	},
+	decodePercent: function(s) {
+		if (s) {
+			// Handle application/x-www-form-urlencoded, which is defined by
+			// http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1
+			s = s.replace(/\+/g, ' ');
+		}
+		return decodeURIComponent(s);
+	},
+	/** Convert the given parameters to an Array of name-value pairs. */
+	getParameterList: function(parameters) {
+		if (! parameters) {
+			return [];
+		}
+		if (typeof parameters != 'object') {
+			return OAuth.decodeForm(parameters + '');
+		}
+		if (parameters instanceof Array) {
+			return parameters;
+		}
+		var list = [];
+		for (var p in parameters) {
+			list.push([p, parameters[p]]);
+		}
+		return list;
+	},
+	/** Convert the given parameters to a map from name to value. */
+	getParameterMap: function(parameters) {
+		if (! parameters) {
+			return {};
+		}
+		if (typeof parameters != 'object') {
+			return OAuth.getParameterMap(OAuth.decodeForm(parameters + ''));
+		}
+		if (parameters instanceof Array) {
+			var map = {};
+			for (var p = 0, len = parameters.length; p < len; ++p) {
+				var key = parameters[p][0];
+				if (map[key] === undefined) { // first value wins
+					map[key] = parameters[p][1];
+				}
+			}
+			return map;
+		}
+		return parameters;
+	},
+	getParameter: function(parameters, name) {
+		if (parameters instanceof Array) {
+			for (var p = 0, len = parameters.length; p < len; ++p) {
+				if (parameters[p][0] == name) {
+					return parameters[p][1]; // first value wins
+				}
+			}
+		} else {
+			return OAuth.getParameterMap(parameters)[name];
+		}
+		return null;
+	},
+	formEncode: function(parameters) {
+		var form = '';
+		var list = OAuth.getParameterList(parameters);
+		for (var p = 0, len = list.length; p < len; ++p) {
+			var value = list[p][1];
+			if (value == null) value = '';
+			if (form != '') form += '&';
+			form += OAuth.percentEncode(list[p][0])
+				+ '=' + OAuth.percentEncode(value);
+		}
+		return form;
+	},
+	decodeForm: function(form) {
+		var list = [];
+		var nvps = form.split('&');
+		for (var n = 0, len = nvps.length; n < len; ++n) {
+			var nvp = nvps[n];
+			if (nvp == '') {
+				continue;
+			}
+			var equals = nvp.indexOf('=');
+			var name, value;
+			if (equals < 0) {
+				name = OAuth.decodePercent(nvp);
+				value = null;
+			} else {
+				name = OAuth.decodePercent(nvp.substring(0, equals));
+				value = OAuth.decodePercent(nvp.substring(equals + 1));
+			}
+			list.push([name, value]);
+		}
+		return list;
+	},
+	setParameter: function(message, name, value) {
+		var parameters = message.parameters;
+		if (parameters instanceof Array) {
+			for (var p = 0; p < parameters.length; ++p) {
+				if (parameters[p][0] == name) {
+					if (value === undefined) {
+						parameters.splice(p, 1);
+					} else {
+						parameters[p][1] = value;
+						value = undefined;
+					}
+				}
+			}
+			if (value !== undefined) {
+				parameters.push([name, value]);
+			}
+		} else {
+			parameters = OAuth.getParameterMap(parameters);
+			parameters[name] = value;
+			message.parameters = parameters;
+		}
+	},
+	setParameters: function(message, parameters) {
+		var list = OAuth.getParameterList(parameters);
+		for (var i = 0, len = list.length; i < len; ++i) {
+			OAuth.setParameter(message, list[i][0], list[i][1]);
+		}
+	},
+	/** Fill in parameters to help construct a request message.
+		This function doesn't fill in every parameter.
+		The accessor object should be like:
+		{consumerKey:'foo', consumerSecret:'bar', accessorSecret:'nurn', token:'krelm', tokenSecret:'blah'}
+		The accessorSecret property is optional.
+	 */
+	completeRequest: function(message, accessor) {
 		message.method = message.method || 'GET';
-    var map = OAuth.getParameterMap(message.parameters);
-    if (! map.oauth_consumer_key) {
-      OAuth.setParameter(message, 'oauth_consumer_key', accessor.consumerKey || '');
-    }
-    if (! map.oauth_token && accessor.token) {
-      OAuth.setParameter(message, 'oauth_token', accessor.token);
-    }
-    if (! map.oauth_version) {
-      OAuth.setParameter(message, 'oauth_version', '1.0');
-    }
-    if (! map.oauth_timestamp) {
-      OAuth.setParameter(message, 'oauth_timestamp', OAuth.timestamp());
-    }
-    if (! map.oauth_nonce) {
-      OAuth.setParameter(message, 'oauth_nonce', OAuth.nonce(6));
-    }
-    OAuth.SignatureMethod.sign(message, accessor);
-  },
-  setTimestampAndNonce: function(message) {
-    OAuth.setParameter(message, 'oauth_timestamp', OAuth.timestamp());
-    OAuth.setParameter(message, 'oauth_nonce', OAuth.nonce(6));
-  },
-  addToURL: function(url, parameters) {
-    var newURL = url;
-    if (parameters) {
-      var toAdd = OAuth.formEncode(parameters);
-      if (toAdd.length > 0) {
-        newURL += url.indexOf('?') < 0 ? '?' : '&';
-        newURL += toAdd;
-      }
-    }
-    return newURL;
-  },
-  /** Construct the value of the Authorization header for an HTTP request. */
-  getAuthorizationHeader: function(realm, parameters) {
-    var header = 'OAuth realm="' + OAuth.percentEncode(realm) + '"';
-    var list = OAuth.getParameterList(parameters);
+		var map = OAuth.getParameterMap(message.parameters);
+		if (! map.oauth_consumer_key) {
+			OAuth.setParameter(message, 'oauth_consumer_key', accessor.consumerKey || '');
+		}
+		if (! map.oauth_token && accessor.token) {
+			OAuth.setParameter(message, 'oauth_token', accessor.token);
+		}
+		if (! map.oauth_version) {
+			OAuth.setParameter(message, 'oauth_version', '1.0');
+		}
+		if (! map.oauth_timestamp) {
+			OAuth.setParameter(message, 'oauth_timestamp', OAuth.timestamp());
+		}
+		if (! map.oauth_nonce) {
+			OAuth.setParameter(message, 'oauth_nonce', OAuth.nonce(6));
+		}
+		OAuth.SignatureMethod.sign(message, accessor);
+	},
+	setTimestampAndNonce: function(message) {
+		OAuth.setParameter(message, 'oauth_timestamp', OAuth.timestamp());
+		OAuth.setParameter(message, 'oauth_nonce', OAuth.nonce(6));
+	},
+	addToURL: function(url, parameters) {
+		var newURL = url;
+		if (parameters) {
+			var toAdd = OAuth.formEncode(parameters);
+			if (toAdd.length > 0) {
+				newURL += url.indexOf('?') < 0 ? '?' : '&';
+				newURL += toAdd;
+			}
+		}
+		return newURL;
+	},
+	/** Construct the value of the Authorization header for an HTTP request. */
+	getAuthorizationHeader: function(realm, parameters) {
+		var header = 'OAuth realm="' + OAuth.percentEncode(realm) + '"';
+		var list = OAuth.getParameterList(parameters);
 		var parameter, name;
-    for (var p = 0, len = list.length; p < len; ++p) {
-      parameter = list[p];
-      name = parameter[0];
-      if (name.indexOf('oauth_') == 0 || name.indexOf('x_auth_') == 0) {
-        header += ',' + OAuth.percentEncode(name) + '="' + OAuth.percentEncode(parameter[1]) + '"';
-      }
-    }
-    return header;
-  },
-  /** Correct the time using a parameter from the URL from which the last script was loaded. */
-  correctTimestampFromSrc: function(parameterName) {
-    parameterName = parameterName || 'oauth_timestamp';
-    var scripts = document.getElementsByTagName('script');
-    if (scripts == null || ! scripts.length) return;
-    var src = scripts[scripts.length-1].src;
-    if (! src) return;
-    var q = src.indexOf('?');
-    if (q < 0) return;
-    parameters = OAuth.getParameterMap(OAuth.decodeForm(src.substring(q+1)));
-    var t = parameters[parameterName];
-    if (! t) return;
-    OAuth.correctTimestamp(t);
-  },
-  /** Generate timestamps starting with the given value. */
-  correctTimestamp: function(timestamp) {
-    OAuth.timeCorrectionMsec = (timestamp * 1000) - (new Date()).getTime();
-  },
-  /** The difference between the correct time and my clock. */
-  timeCorrectionMsec: 0,
-  timestamp: function timestamp() {
-    var t = (new Date()).getTime() + OAuth.timeCorrectionMsec;
-    return Math.floor(t / 1000);
-  },
-  nonce: function(length) {
-    var chars = OAuth.nonce.CHARS;
-    var result = '';
-    for (var i = 0; i < length; ++i) {
-      var rnum = Math.floor(Math.random() * chars.length);
-      result += chars.substring(rnum, rnum+1);
-    }
-    return result;
-  }
+		for (var p = 0, len = list.length; p < len; ++p) {
+			parameter = list[p];
+			name = parameter[0];
+			if (name.indexOf('oauth_') == 0 || name.indexOf('x_auth_') == 0) {
+				header += ',' + OAuth.percentEncode(name) + '="' + OAuth.percentEncode(parameter[1]) + '"';
+			}
+		}
+		return header;
+	},
+	/** Correct the time using a parameter from the URL from which the last script was loaded. */
+	correctTimestampFromSrc: function(parameterName) {
+		parameterName = parameterName || 'oauth_timestamp';
+		var scripts = document.getElementsByTagName('script');
+		if (scripts == null || ! scripts.length) return;
+		var src = scripts[scripts.length-1].src;
+		if (! src) return;
+		var q = src.indexOf('?');
+		if (q < 0) return;
+		parameters = OAuth.getParameterMap(OAuth.decodeForm(src.substring(q+1)));
+		var t = parameters[parameterName];
+		if (! t) return;
+		OAuth.correctTimestamp(t);
+	},
+	/** Generate timestamps starting with the given value. */
+	correctTimestamp: function(timestamp) {
+		OAuth.timeCorrectionMsec = (timestamp * 1000) - (new Date()).getTime();
+	},
+	/** The difference between the correct time and my clock. */
+	timeCorrectionMsec: 0,
+	timestamp: function timestamp() {
+		var t = (new Date()).getTime() + OAuth.timeCorrectionMsec;
+		return Math.floor(t / 1000);
+	},
+	nonce: function(length) {
+		var chars = OAuth.nonce.CHARS;
+		var result = '';
+		for (var i = 0; i < length; ++i) {
+			var rnum = Math.floor(Math.random() * chars.length);
+			result += chars.substring(rnum, rnum+1);
+		}
+		return result;
+	}
 });
 
 OAuth.nonce.CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
 
 /** Define a constructor function,
-  without causing trouble to anyone who was using it as a namespace.
-  That is, if parent[name] already existed and had properties,
-  copy those properties into the new constructor.
+	without causing trouble to anyone who was using it as a namespace.
+	That is, if parent[name] already existed and had properties,
+	copy those properties into the new constructor.
  */
 OAuth.declareClass = function(parent, name, newConstructor) {
-  var previous = parent[name];
-  parent[name] = newConstructor;
-  if (newConstructor != null && previous != null) {
-    for (var key in previous) {
-      if (key != 'prototype') {
-        newConstructor[key] = previous[key];
-      }
-    }
-  }
-  return newConstructor;
+	var previous = parent[name];
+	parent[name] = newConstructor;
+	if (newConstructor != null && previous != null) {
+		for (var key in previous) {
+			if (key != 'prototype') {
+				newConstructor[key] = previous[key];
+			}
+		}
+	}
+	return newConstructor;
 }
 
 /** An abstract algorithm for signing messages. */
@@ -1574,181 +1574,181 @@ OAuth.declareClass(OAuth, 'SignatureMethod', function() { });
 
 // instance members
 OAuth.setProperties(OAuth.SignatureMethod.prototype, {
-  /** Add a signature to the message. */
-  sign: function(message) {
-    var baseString = OAuth.SignatureMethod.getBaseString(message);
-    var signature = this.getSignature(baseString);
-    OAuth.setParameter(message, 'oauth_signature', signature);
-    return signature; // just in case someone's interested
-  },
-  /** Set the key string for signing. */
-  initialize: function(name, accessor) {
-    var consumerSecret;
-    if (accessor.accessorSecret
-      && name.length > 9
-      && name.substring(name.length-9) == '-Accessor')
-    {
-      consumerSecret = accessor.accessorSecret;
-    } else {
-      consumerSecret = accessor.consumerSecret;
-    }
-    this.key = OAuth.percentEncode(consumerSecret)
-      + '&' + OAuth.percentEncode(accessor.tokenSecret);
-  }
+	/** Add a signature to the message. */
+	sign: function(message) {
+		var baseString = OAuth.SignatureMethod.getBaseString(message);
+		var signature = this.getSignature(baseString);
+		OAuth.setParameter(message, 'oauth_signature', signature);
+		return signature; // just in case someone's interested
+	},
+	/** Set the key string for signing. */
+	initialize: function(name, accessor) {
+		var consumerSecret;
+		if (accessor.accessorSecret
+			&& name.length > 9
+			&& name.substring(name.length-9) == '-Accessor')
+		{
+			consumerSecret = accessor.accessorSecret;
+		} else {
+			consumerSecret = accessor.consumerSecret;
+		}
+		this.key = OAuth.percentEncode(consumerSecret)
+			+ '&' + OAuth.percentEncode(accessor.tokenSecret);
+	}
 });
 
 /* SignatureMethod expects an accessor object to be like this:
-   {tokenSecret: "lakjsdflkj...", consumerSecret: "QOUEWRI..", accessorSecret: "xcmvzc..."}
-   The accessorSecret property is optional.
+	 {tokenSecret: "lakjsdflkj...", consumerSecret: "QOUEWRI..", accessorSecret: "xcmvzc..."}
+	 The accessorSecret property is optional.
  */
 // Class members:
 OAuth.setProperties(OAuth.SignatureMethod, {
-  sign: function sign(message, accessor) {
-    var name = OAuth.getParameterMap(message.parameters).oauth_signature_method;
-    if (! name || name == '') {
-      name = 'HMAC-SHA1';
-      OAuth.setParameter(message, 'oauth_signature_method', name);
-    }
-    OAuth.SignatureMethod.newMethod(name, accessor).sign(message);
-  },
-  /** Instantiate a SignatureMethod for the given method name. */
-  newMethod: function(name, accessor) {
-    var impl = OAuth.SignatureMethod.REGISTERED[name];
-    if (impl) {
-      var method = new impl();
-      method.initialize(name, accessor);
-      return method;
-    }
-    var err = new Error('signature_method_rejected');
-    var acceptable = '';
-    for (var r in OAuth.SignatureMethod.REGISTERED) {
-      if (acceptable != '') acceptable += '&';
-      acceptable += OAuth.percentEncode(r);
-    }
-    err.oauth_acceptable_signature_methods = acceptable;
-    throw err;
-  },
-  /** A map from signature method name to constructor. */
-  REGISTERED : {},
-  /** Subsequently, the given constructor will be used for the named methods.
-    The constructor will be called with no parameters.
-    The resulting object should usually implement getSignature(baseString).
-    You can easily define such a constructor by calling makeSubclass, below.
-   */
-  registerMethodClass: function(names, classConstructor) {
-    for (var n = 0, len = names.length; n < len; ++n) {
-      OAuth.SignatureMethod.REGISTERED[names[n]] = classConstructor;
-    }
-  },
-  /** Create a subclass of OAuth.SignatureMethod, with the given getSignature function. */
-  makeSubclass: function(getSignatureFunction) {
-    var superClass = OAuth.SignatureMethod;
-    var subClass = function() {
-      superClass.call(this);
-    };
-    subClass.prototype = new superClass();
-    // Delete instance variables from prototype:
-    // delete subclass.prototype... There aren't any.
-    subClass.prototype.getSignature = getSignatureFunction;
-    subClass.prototype.constructor = subClass;
-    return subClass;
-  },
-  getBaseString: function(message) {
-    var URL = message.action;
-    var q = URL.indexOf('?');
-    var parameters;
-    if (q < 0) {
-      parameters = message.parameters;
-    } else {
-      // Combine the URL query string with the other parameters:
-      parameters = OAuth.decodeForm(URL.substring(q + 1));
-      var toAdd = OAuth.getParameterList(message.parameters);
-      for (var a = 0, len = toAdd.length; a < len; ++a) {
-        parameters.push(toAdd[a]);
-      }
-    }
-    return OAuth.percentEncode(message.method.toUpperCase())
-      + '&' + OAuth.percentEncode(OAuth.SignatureMethod.normalizeUrl(URL))
-      + '&' + OAuth.percentEncode(OAuth.SignatureMethod.normalizeParameters(parameters));
-  },
-  normalizeUrl: function(url) {
-    var uri = OAuth.SignatureMethod.parseUri(url);
-    var scheme = uri.protocol.toLowerCase();
-    var authority = uri.authority.toLowerCase();
-    var dropPort = (scheme == 'http' && uri.port == 80)
-          || (scheme == 'https' && uri.port == 443);
-    if (dropPort) {
-      // find the last : in the authority
-      var index = authority.lastIndexOf(':');
-      if (index >= 0) {
-        authority = authority.substring(0, index);
-      }
-    }
-    var path = uri.path;
-    if (! path) {
-      path = '/'; // conforms to RFC 2616 section 3.2.2
-    }
-    // we know that there is no query and no fragment here.
-    return scheme + '://' + authority + path;
-  },
-  parseUri: function(str) {
-    /* This function was adapted from parseUri 1.2.1
-       http://stevenlevithan.com/demo/parseuri/js/assets/parseuri.js
-     */
-    var o = {
-      key: ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'],
-      parser: {
-        strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/
-      }
-    };
-    var m = o.parser.strict.exec(str);
-    var uri = {};
-    var i = 14;
-    while (i--) {
-      uri[o.key[i]] = m[i] || '';
-    }
-    return uri;
-  },
-  normalizeParameters: function(parameters) {
-    if (! parameters) {
-      return '';
-    }
-    var list = OAuth.getParameterList(parameters);
-    var sortable = [];
-    for (var p = 0, len = list.length; p < len; ++p) {
-      var nvp = list[p];
-      if (nvp[0] != 'oauth_signature') {
-        sortable.push([OAuth.percentEncode(nvp[0])
-                + ' ' // because it comes before any character that can appear in a percentEncoded string.
-                + OAuth.percentEncode(nvp[1])
-                , nvp]);
-      }
-    }
-    sortable.sort(function(a,b) {
-      if (a[0] < b[0]) return -1;
-      if (a[0] > b[0]) return 1;
-      return 0;
-    });
-    var sorted = [];
-    for (var s = 0, len = sortable.length; s < len; ++s) {
-      sorted[sorted.length] = (sortable[s][1]);
-    }
-    return OAuth.formEncode(sorted);
-  }
+	sign: function sign(message, accessor) {
+		var name = OAuth.getParameterMap(message.parameters).oauth_signature_method;
+		if (! name || name == '') {
+			name = 'HMAC-SHA1';
+			OAuth.setParameter(message, 'oauth_signature_method', name);
+		}
+		OAuth.SignatureMethod.newMethod(name, accessor).sign(message);
+	},
+	/** Instantiate a SignatureMethod for the given method name. */
+	newMethod: function(name, accessor) {
+		var impl = OAuth.SignatureMethod.REGISTERED[name];
+		if (impl) {
+			var method = new impl();
+			method.initialize(name, accessor);
+			return method;
+		}
+		var err = new Error('signature_method_rejected');
+		var acceptable = '';
+		for (var r in OAuth.SignatureMethod.REGISTERED) {
+			if (acceptable != '') acceptable += '&';
+			acceptable += OAuth.percentEncode(r);
+		}
+		err.oauth_acceptable_signature_methods = acceptable;
+		throw err;
+	},
+	/** A map from signature method name to constructor. */
+	REGISTERED : {},
+	/** Subsequently, the given constructor will be used for the named methods.
+		The constructor will be called with no parameters.
+		The resulting object should usually implement getSignature(baseString).
+		You can easily define such a constructor by calling makeSubclass, below.
+	 */
+	registerMethodClass: function(names, classConstructor) {
+		for (var n = 0, len = names.length; n < len; ++n) {
+			OAuth.SignatureMethod.REGISTERED[names[n]] = classConstructor;
+		}
+	},
+	/** Create a subclass of OAuth.SignatureMethod, with the given getSignature function. */
+	makeSubclass: function(getSignatureFunction) {
+		var superClass = OAuth.SignatureMethod;
+		var subClass = function() {
+			superClass.call(this);
+		};
+		subClass.prototype = new superClass();
+		// Delete instance variables from prototype:
+		// delete subclass.prototype... There aren't any.
+		subClass.prototype.getSignature = getSignatureFunction;
+		subClass.prototype.constructor = subClass;
+		return subClass;
+	},
+	getBaseString: function(message) {
+		var URL = message.action;
+		var q = URL.indexOf('?');
+		var parameters;
+		if (q < 0) {
+			parameters = message.parameters;
+		} else {
+			// Combine the URL query string with the other parameters:
+			parameters = OAuth.decodeForm(URL.substring(q + 1));
+			var toAdd = OAuth.getParameterList(message.parameters);
+			for (var a = 0, len = toAdd.length; a < len; ++a) {
+				parameters.push(toAdd[a]);
+			}
+		}
+		return OAuth.percentEncode(message.method.toUpperCase())
+			+ '&' + OAuth.percentEncode(OAuth.SignatureMethod.normalizeUrl(URL))
+			+ '&' + OAuth.percentEncode(OAuth.SignatureMethod.normalizeParameters(parameters));
+	},
+	normalizeUrl: function(url) {
+		var uri = OAuth.SignatureMethod.parseUri(url);
+		var scheme = uri.protocol.toLowerCase();
+		var authority = uri.authority.toLowerCase();
+		var dropPort = (scheme == 'http' && uri.port == 80)
+					|| (scheme == 'https' && uri.port == 443);
+		if (dropPort) {
+			// find the last : in the authority
+			var index = authority.lastIndexOf(':');
+			if (index >= 0) {
+				authority = authority.substring(0, index);
+			}
+		}
+		var path = uri.path;
+		if (! path) {
+			path = '/'; // conforms to RFC 2616 section 3.2.2
+		}
+		// we know that there is no query and no fragment here.
+		return scheme + '://' + authority + path;
+	},
+	parseUri: function(str) {
+		/* This function was adapted from parseUri 1.2.1
+			 http://stevenlevithan.com/demo/parseuri/js/assets/parseuri.js
+		 */
+		var o = {
+			key: ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'],
+			parser: {
+				strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/
+			}
+		};
+		var m = o.parser.strict.exec(str);
+		var uri = {};
+		var i = 14;
+		while (i--) {
+			uri[o.key[i]] = m[i] || '';
+		}
+		return uri;
+	},
+	normalizeParameters: function(parameters) {
+		if (! parameters) {
+			return '';
+		}
+		var list = OAuth.getParameterList(parameters);
+		var sortable = [];
+		for (var p = 0, len = list.length; p < len; ++p) {
+			var nvp = list[p];
+			if (nvp[0] != 'oauth_signature') {
+				sortable.push([OAuth.percentEncode(nvp[0])
+								+ ' ' // because it comes before any character that can appear in a percentEncoded string.
+								+ OAuth.percentEncode(nvp[1])
+								, nvp]);
+			}
+		}
+		sortable.sort(function(a,b) {
+			if (a[0] < b[0]) return -1;
+			if (a[0] > b[0]) return 1;
+			return 0;
+		});
+		var sorted = [];
+		for (var s = 0, len = sortable.length; s < len; ++s) {
+			sorted[sorted.length] = (sortable[s][1]);
+		}
+		return OAuth.formEncode(sorted);
+	}
 });
 
 OAuth.SignatureMethod.registerMethodClass(
-  ['HMAC-SHA1', 'HMAC-SHA1-Accessor'],
-  OAuth.SignatureMethod.makeSubclass(function(baseString) {
-    b64pad = '=';
+	['HMAC-SHA1', 'HMAC-SHA1-Accessor'],
+	OAuth.SignatureMethod.makeSubclass(function(baseString) {
+		b64pad = '=';
 		console.log('baseString\n' + baseString);
-    var signature = b64_hmac_sha1(this.key, baseString);
-    return signature;
-  })
+		var signature = b64_hmac_sha1(this.key, baseString);
+		return signature;
+	})
 );
 
 try {
-  OAuth.correctTimestampFromSrc();
+	OAuth.correctTimestampFromSrc();
 } catch(e) { }
 })();
 
@@ -1888,7 +1888,7 @@ self.OBlobBuilder || self.MsBlobBuilder || (function (view) {
  *
  * By Eli Grey, http://eligrey.com and Devin Samarin, https://github.com/eboyjr
  * License: X11/MIT
- *   See LICENSE.md
+ *	 See LICENSE.md
  */
 
 /*! @source http://purl.eligrey.com/github/canvas-toBlob.js/blob/master/canvas-toBlob.js */
