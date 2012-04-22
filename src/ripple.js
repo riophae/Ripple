@@ -1695,7 +1695,7 @@
 	}
 
 	/* 获取验证地址 */
-	authorize.byPINCodeOrCallbackUrl = function(callback_url) {
+	authorize.withPINCodeOrCallbackUrl = function(callback_url) {
 		return authorize.
 			getRequestToken().
 			next(function(request_token) {
@@ -1714,7 +1714,7 @@
 	}
 
 	/* 通过 PIN Code 获取 Access Token */
-	authorize.byPINCode = function(promise) {
+	authorize.withPINCode = function(promise) {
 		var request_token;
 		return authorize.
 			byPINCodeOrCallbackUrl('oob').
@@ -1730,7 +1730,7 @@
 	}
 
 	/* 通过 Callback 获取 Access Token */
-	authorize.byCallbackUrl = function(callback_url) {
+	authorize.withCallbackUrl = function(callback_url) {
 		return authorize.
 			byPINCodeOrCallbackUrl(callback_url).
 			next(function(args) {
@@ -1760,7 +1760,7 @@
 	}
 
 	/* 通过用户名与密码获取 Access Token */
-	authorize.byCredentials = function(username, password) {
+	authorize.withCredentials = function(username, password) {
 		var message = authorize.generateMsg('access_token', {
 			x_auth_username: username,
 			x_auth_password: password,
