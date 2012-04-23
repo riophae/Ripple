@@ -594,6 +594,20 @@
 		}
 	}, { urlEncoded: false });
 
+	//https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.notify-num
+	N({
+		name: 'getNotifyNum',
+		action: 'account/notify_num',
+		method: 'GET'
+	});
+
+	//https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.update-notify-num
+	N({
+		name: 'updateNotifyNum',
+		action: 'account/update_notify_num',
+		method: 'POST'
+	});
+
 	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.verify-credentials
 	N({
 		name: 'verify',
