@@ -1717,7 +1717,7 @@
 	authorize.withPINCode = function(promise) {
 		var request_token;
 		return authorize.
-			byPINCodeOrCallbackUrl('oob').
+			withPINCodeOrCallbackUrl('oob').
 			next(function(args) {
 				request_token = args.request_token;
 				return promise(args.auth_url);
