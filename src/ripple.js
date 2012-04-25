@@ -1818,7 +1818,7 @@
 	var Account = function(access_token, options) {
 		this.accessToken = access_token;
 		this.accessor = {
-			consumerSecret: consumer.consumer_secret,
+			consumerSecret: '',
 			tokenSecret: access_token.oauth_token_secret
 		};
 
@@ -1887,7 +1887,10 @@
 					oauth_version: config.OAuthVersion
 				}
 			};
-			var accessor = this.accessor;
+			var accessor = {
+				consumerSecret: consumer.consumer_secret,
+				tokenSecret: this.accessor.tokenSecret
+			};
 
 			Ripple.OAuth.setTimestampAndNonce(message);
 

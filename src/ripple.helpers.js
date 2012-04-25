@@ -724,7 +724,6 @@ Ripple.helpers.loadImage = function(url) {
 		setTimeout(function() {
 			d.call(img);
 		}, 0);
-		//Ripple.Deferred.call(d.call, img);
 	} else {
 		img.onload = function() {
 			d.call(img);
