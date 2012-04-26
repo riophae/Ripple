@@ -727,7 +727,7 @@
 		} else if (arguments.length == 2) {
 			// 没有指定监听函数且操作类型为解除注册
 			// 直接清空队列
-			observers_list.splice(0, observers_list.length);
+			observers_list.length = 0;
 			return true;
 		}
 		helpers.error(error + '参数错误.');
