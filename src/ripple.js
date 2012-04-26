@@ -895,54 +895,63 @@
 	}
 
 	/* 根据事件名获取含有便捷方法的事件对象 */
-	events.getShortcuts = function(event_type) {
-		// 确认事件是否已注册
-		if (! events.isEventRegistered(event_type)) {
-			helpers.error('获取事件 ' + event_type + ' 时发生致命错误.');
-			return false;
-		}
-		// 取得合法化的事件名称
-		var _event_type = events.parseEventType(event_type);
-		// 修正参数
+	events.getShortcuts = (function() {
 		function processArgs() {
-			var args = $A(arguments[0]);
+			var args = $A(arguments);
 			// 补全事件名
 			if (events._typeCheck(args[0] + '.')) {
-				args[0] = (args[0] + '').toLowerCase() + '.' + _event_type;
+				args[0] = (args[0] + '').toLowerCase() + '.' + this.getEventType();
 			} else {
-				args.unshift(_event_type);
+				args.unshift(this.getEventType());
 			}
 			return args;
 		}
 		function _handler(_type) {
 			_type = _type ? 'observe' : 'stopObserving';
 			return function() {
-				events[_type].apply(events, processArgs(arguments));
-				return ret;
+				events[_type].apply(events, processArgs.apply(this, arguments));
+				return this;
 			}
 		}
-		var ret = {
+
+		function getShortcuts(event_type) {
+			// 确认事件是否已注册
+			if (! events.isEventRegistered(event_type)) {
+				helpers.error('获取事件 ' + event_type + ' 时发生致命错误.');
+				return false;
+			}
+			// 取得合法化的事件名称
+			event_type = events.parseEventType(event_type);
+			return new Shortcuts(event_type);
+		}
+
+		var Shortcuts = function(event_type) {
+			this.getEventType = function() {
+				return event_type;
+			}
+		}
+
+		Shortcuts.prototype = {
+			constructor: getShortcuts,
 			trigger: function() {
-				return events.trigger.apply(undefined, processArgs(arguments));
+				return events.trigger.apply(undefined, processArgs.apply(this, arguments));
 			},
 			triggerWith: function() {
-				return events.trigger.apply(arguments[0], processArgs($A(arguments, 1)));
-			},
-			getEventType: function() {
-				return _event_type;
+				return events.trigger.apply(arguments[0], processArgs.apply(this, $A(arguments, 1)));
 			},
 			unregister: function() {
-				return events.isEventRegistered(_event_type) && events.unregister(_event_type);
+				return events.isEventRegistered(this.getEventType()) && events.unregister(this.getEventType());
 			}
 		};
 		['observe', 'stopObserving'].forEach(function(item, i) {
-			ret[item] = _handler(! i);
+			Shortcuts.prototype[item] = _handler(! i);
 		});
-		return ret;
-	}
+
+		return getShortcuts;
+	})();
 
 	/* 注册/取消注册全局事件监听器 */
-	;;;['addGlobalObserver', 'removeGlobalObserver'].forEach(function(item, i) {
+	['addGlobalObserver', 'removeGlobalObserver'].forEach(function(item, i) {
 		var error = (i ? '解除' : '') + '注册全局事件失败: ';
 		events[item] = function(type, func) {
 			var successful = false;
