@@ -1337,24 +1337,7 @@
 		var ajax_onstart_event = events.registerOneTimeEvent('ajax_onstart', _getEventTemp());
 		var ajax_send_event = events.registerOneTimeEvent('ajax_send', _getEventTemp());
 		var ajax_oncomplete_event = events.registerOneTimeEvent('ajax_oncomplete',
-			helpers.clone(_getEventTemp(), { isStopable: returnFalse })).
-			observe([
-				options.oncomplete,
-				function(data, e) {
-					// 如果是连接到饭否服务器的请求
-					if (helpers.startsWith(e.url, constants.baseOAuthUrl) ||
-						helpers.startsWith(e.url, config.baseAPIUrl)) {
-						// 读取服务器时间
-						var server_date = new Date(this.getHeader('Date')).getTime();
-						if (server_date) {
-							// 修正服务器与本地的时间差
-							Ripple.OAuth.correctTimestamp(server_date / 1000);
-						}
-					}
-					// 调用链式回调函数 (Deferred)
-					request.deferred[request.isSuccessful() ? 'call' : 'fail'](data);
-				}
-			]);
+			helpers.clone(_getEventTemp(), { isStopable: returnFalse }));
 
 		function unregisterOneTimeEvents() {
 			var one_time_event;
@@ -1461,6 +1444,26 @@
 				// 返回一个 Deferred 对象, 从而终止 next 链的运行
 				return new Ripple.Deferred();
 			}
+		}).
+
+		next(function() {
+			ajax_oncomplete_event.observe([
+				options.oncomplete,
+				function(data, e) {
+					// 如果是连接到饭否服务器的请求
+					if (helpers.startsWith(e.url, constants.baseOAuthUrl) ||
+						helpers.startsWith(e.url, config.baseAPIUrl)) {
+						// 读取服务器时间
+						var server_date = new Date(this.getHeader('Date')).getTime();
+						if (server_date) {
+							// 修正服务器与本地的时间差
+							Ripple.OAuth.correctTimestamp(server_date / 1000);
+						}
+					}
+					// 调用链式回调函数 (Deferred)
+					request.deferred[request.isSuccessful() ? 'call' : 'fail'](data);
+				}
+			])
 		}).
 
 		next(function() {
@@ -1676,6 +1679,44 @@
 		options.accepts = 'json';
 		return get(url, options);
 	}
+
+
+
+	/*
+		 ** 网址缩短 **
+	*/
+	var shorten = {};
+
+	/* 注册网址缩短服务 */
+	shorten.register = function(options) {
+		shorten[options.name] = function() {
+			var params = options.argsProcessor.apply(this, arguments);
+			return post(options.url, {
+				params: params
+			});
+		}
+	}
+
+	shorten.register({
+		name: 'is.gd',
+		url: 'http://is.gd/create.php',
+		argsProcessor: function(long_url) {
+			return {
+				format: 'simple',
+				url: long_url
+			};
+		}
+	});
+
+	shorten.register({
+		name: 'yep.it',
+		url: 'http://yep.it/api.php',
+		argsProcessor: function(long_url) {
+			return {
+				url: long_url
+			};
+		}
+	});
 
 
 	/*
@@ -2019,6 +2060,9 @@
 		getConfig: function(name) {
 			return config[name];
 		},
+
+		/* 网址缩短服务 */
+		shorten: shorten,
 
 		/* 验证方法 */
 		authorize: authorize,

@@ -740,8 +740,8 @@ Ripple.helpers.image2canvas = function(img) {
 	return Ripple.Deferred.next(function() {
 		try {
 			var canvas = document.createElement('canvas');
-			var w = img.naturalWidth;
-			var h = img.naturalHeight;
+			var w = img.naturalWidth || img.width;
+			var h = img.naturalHeight || img.height;
 			canvas.width = w;
 			canvas.height = h;
 			var ctx = canvas.getContext('2d');
@@ -768,9 +768,11 @@ Ripple.helpers.buildPhotoBlob = function(object) {
 			var timeout = setTimeout(function() {
 				d.fail(object);
 			}, 5000);
-			Ripple.Deferred().call(canvas.toBlob, function(blob) {
-				clearTimeout(timeout);
-				d.call(blob);
+			Ripple.Deferred.next(function() {
+				canvas.toBlob(function(blob) {
+					clearTimeout(timeout);
+					d.call(blob);
+				});
 			});
 			return d;
 		});
@@ -1740,7 +1742,6 @@ OAuth.SignatureMethod.registerMethodClass(
 	['HMAC-SHA1', 'HMAC-SHA1-Accessor'],
 	OAuth.SignatureMethod.makeSubclass(function(baseString) {
 		b64pad = '=';
-		console.log('baseString\n' + baseString);
 		var signature = b64_hmac_sha1(this.key, baseString);
 		return signature;
 	})
