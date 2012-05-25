@@ -887,7 +887,7 @@
 		});
 		do {
 			// 由于事件名不允许包含大写字母, 所以生成的 ID 应是 36 位数而不是 62 位数.
-			event_type = (event_type_prefix + constants.OneTimeEventType + helpers.UUID(8, 36)).toLowerCase();
+			event_type = (event_type_prefix + constants.OneTimeEventType + helpers.UUID(2, 36)).toLowerCase();
 			successful = events.register(event_type, event_temp);
 		} while (! successful); // 可能由于种种原因导致注册失败, 此时重新注册
 		// 返回含有便捷方法的对象
