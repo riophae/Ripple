@@ -714,6 +714,43 @@ function binb2b64(binarray) {
 	return str;
 }
 
+/*
+ * Cookies
+ * from http://www.quirksmode.org/js/cookies.html
+ */
+Ripple.helpers.readCookie = function(name) {
+	var name_eq = name + '=';
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ')
+			c = c.substring(1, c.length);
+		if (c.indexOf(name_eq) == 0)
+			return c.substring(name_eq.length, c.length);
+	}
+	return null;
+}
+
+Ripple.helpers.createCookie = function(name, value, days) {
+	var expires = '';
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		var expires = '; expires=' + date.toGMTString();
+	}
+	document.cookie = name + '=' + value + expires + '; path=/';
+}
+
+Ripple.helpers.eraseCookie = function(name) {
+	Ripple.helpers.createCookie(name, '', -1);
+}
+
+
+Ripple.helpers.getUserIdFromCookies = function() {
+	return Ripple.helpers.readCookie('u');
+}
+
+
 
 Ripple.helpers.loadImage = function(url) {
 	var d = new Ripple.Deferred();
