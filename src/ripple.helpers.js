@@ -751,6 +751,29 @@ Ripple.helpers.getUserIdFromCookies = function() {
 }
 
 
+Ripple.helpers.isExist = function(url) {
+	if (! url) return false;
+
+	var xhr = new XMLHttpRequest;
+	xhr.open('HEAD', url, false);
+
+	try {
+		xhr.send(null);
+	}
+	catch (e) {
+		return false;
+	}
+
+	return xhr.status != null &&
+		xhr.status >= 200 &&
+		xhr.status < 300;
+}
+
+Ripple.helpers.isOnline = function() {
+	return Ripple.helpers.isExist('http://m.fanfou.com');
+}
+
+
 
 Ripple.helpers.loadImage = function(url) {
 	var d = new Ripple.Deferred();
