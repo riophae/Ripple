@@ -481,17 +481,7 @@
 	/* 判断对象否为纯粹的对象字面量 */
 	helpers.isPlainObject = function(object) {
 		if (! object || helpers.type(object) != 'object') return false;
-		try {
-			if (object.constructor && ! hasOwn.call(object, 'constructor') &&
-				! hasOwn.call(object.constructor.prototype, 'isPrototypeOf')) {
-				return false;
-			}
-		} catch (e) {
-			return false;
-		}
-		var key;
-		for (key in object) { }
-		return key === undefined || hasOwn.call(object, key);
+		return object.__proto__ == Object.prototype;
 	}
 
 	/* 判断是否为空对象 */
