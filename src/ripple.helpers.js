@@ -765,8 +765,8 @@ Ripple.helpers.loadImage = function(url) {
 		img.onload = function() {
 			d.call(img);
 		}
-		img.onerror = function() {
-			d.fail(url);
+		img.onerror = function(e) {
+			d.fail(e);
 		}
 	}
 	return d;
