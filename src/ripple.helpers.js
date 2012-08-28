@@ -770,7 +770,7 @@ Ripple.helpers.isExist = function(url) {
 }
 
 Ripple.helpers.isOnline = function() {
-	return Ripple.helpers.isExist('http://m.fanfou.com');
+	return Ripple.helpers.isExist('http://m.fanfou.com/?' + +(new Date));
 }
 
 
