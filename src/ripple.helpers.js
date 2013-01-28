@@ -1817,9 +1817,28 @@ try {
  * A complete BlobBuilder shim
  * By Eli Grey
  * License: MIT/X11
+ *
+ * Modified by Lacc Riophae @ 1/28/2013
  */
 self.BlobBuilder || self.WebKitBlobBuilder || self.MozBlobBuilder ||
-self.OBlobBuilder || self.MsBlobBuilder || (function (view) {
+self.OBlobBuilder || self.MsBlobBuilder || (self.Blob ? (function(view) {
+	var
+	FakeBlobBuilder = function () {},
+	FBB_proto = FakeBlobBuilder.prototype = [];
+	FBB_proto.append = function (data) {
+		this.push(data);
+	};
+	FBB_proto.getBlob = function (type) {
+		if (!arguments.length) {
+			type = "application/octet-stream";
+		}
+		return new Blob(this.slice.call(this, 0), { type: type });
+	};
+	FBB_proto.toString = function () {
+		return "[object BlobBuilder]";
+	};
+	self.BlobBuilder = FakeBlobBuilder;
+})(self) : (function (view) {
 	"use strict";
 	var
 	get_class = function (object) {
@@ -1939,7 +1958,7 @@ self.OBlobBuilder || self.MsBlobBuilder || (function (view) {
 		return "[object Blob]";
 	};
 	return FakeBlobBuilder;
-})(self);
+})(self));
 
 
 /* canvas-toBlob.js
