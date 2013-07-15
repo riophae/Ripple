@@ -1235,20 +1235,6 @@
 
 		options = this.options = helpers.fastClone(constants.ajaxOptions, config.ajaxOptions, options || {});
 
-		var lock = options.lock;
-
-		// lock 是一个对象或元素, 可选
-		if (lock) {
-			// 如果检查到 lock 上面的标记, 则直接停止
-			// 但考虑到可能会设置链式回调函数, 所以需要返回一个 Deferred 以避免出错
-			// 这些回调函数不会被触发
-			if (lock._ajax_active_) {
-				return new Ripple.Deferred();
-			}
-			// 在 lock 上面做标记
-			lock._ajax_active_ = true;
-		}
-
 		var xhr = this.xhr = new XMLHttpRequest;
 		var method = options.method = options.method.toUpperCase();
 		var headers = options.headers = (options.headers || {});
@@ -1302,6 +1288,7 @@
 					delete ajax.pool[ajax_uid];
 				}
 				// 取消锁定
+				var lock = options.lock;				
 				if (lock) {
 					delete lock._ajax_active_;
 				}
@@ -1420,6 +1407,25 @@
 		// 将对事件的触发异步化, 所以在事件得到触发前, 允许用户继续修改参数
 		// 所以即便 ajax 请求被封装在系统内部, 仍然可以很容易地被外界修改
 		Ripple.Deferred.
+		next(function() {
+			// lock 是一个对象或元素, 可选
+			var lock = options.lock;
+			if (lock) {
+				// 如果检查到 lock 上面的标记, 则直接停止
+				// 但考虑到可能会设置链式回调函数, 所以需要返回一个 Deferred 以避免出错
+				// 这些回调函数不会被触发
+				if (lock._ajax_active_) {
+					unregisterOneTimeEvents();
+					if (! options.unique) {
+						delete ajax.pool[ajax_uid];
+					}
+					return new Ripple.Deferred();
+				}
+				// 在 lock 上面做标记
+				lock._ajax_active_ = true;
+			}
+
+		}).
 		next(function() {
 			// 全局监听器可能会监视这个事件并使用 event.srcEvent.stop()
 			ajax_onstart_event.
