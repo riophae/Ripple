@@ -1948,7 +1948,7 @@
 			var headers = ajax_options.headers = {};
 
 			if (method == 'GET' || ajax_options.urlEncoded === true) {
-				message.parameters = helpers.fastExtend(parameters, message.parameters);
+				message.parameters = helpers.fastExtend({}, parameters, message.parameters);
 				Ripple.OAuth.SignatureMethod.sign(message, accessor);
 				if (method == 'GET') {
 					message.action += '?' + helpers.param(parameters);

@@ -22,8 +22,12 @@
 
 	function completeStatusParams(params) {
 		params = params || {};
-		params.mode = params.mode || (G('liteMode') ? 'lite' : 'default');
-		params.format = params.format || (G('htmlMode') ? 'html' : undefined);
+		if (G('liteMode')) {
+			params.mode = params.mode || 'lite';
+		}
+		if (G('htmlMode')) {
+			params.format = params.format || 'html';
+		}
 		return params;
 	}
 

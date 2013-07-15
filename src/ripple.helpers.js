@@ -1563,16 +1563,19 @@ OAuth.setProperties(OAuth, {
 	},
 	/** Construct the value of the Authorization header for an HTTP request. */
 	getAuthorizationHeader: function(realm, parameters) {
-		var header = 'OAuth realm="' + OAuth.percentEncode(realm) + '"';
+		realm = realm ? 'realm="' + OAuth.percentEncode(realm) + '"' : '';
+		var header = 'OAuth ' + realm;
 		var list = OAuth.getParameterList(parameters);
 		var parameter, name;
+		var toAdd = [];
 		for (var p = 0, len = list.length; p < len; ++p) {
 			parameter = list[p];
 			name = parameter[0];
 			if (name.indexOf('oauth_') == 0 || name.indexOf('x_auth_') == 0) {
-				header += ',' + OAuth.percentEncode(name) + '="' + OAuth.percentEncode(parameter[1]) + '"';
+				toAdd.push(OAuth.percentEncode(name) + '="' + OAuth.percentEncode(parameter[1]) + '"');
 			}
 		}
+		header += toAdd.join(', ');
 		return header;
 	},
 	/** Correct the time using a parameter from the URL from which the last script was loaded. */
