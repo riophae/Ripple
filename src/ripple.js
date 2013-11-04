@@ -1,11 +1,11 @@
 /**
- * @fileOverview Ripple / 饭否 JavaScript 工具包
- * @author       锐风(Lacc Riophae) http://fanfou.com/ruif
+ * @fileOverview Ripple / Twitter JavaScript 工具包
+ * @author       锐风(Lacc Riophae) https://twitter.com/ruif
  *
  * @description
- *   Ripple 是一个面向 Web 应用 / 浏览器扩展 的饭否开发工具包, 提供了 AJAX 类、
+ *   Ripple 是一个面向 Web 应用 / 浏览器扩展 的 Twitter 开发工具包, 提供了 AJAX 类、
  *   OAuth 验证、所有 API 方法及客户端常用的工具等. 利用 Ripple, 你可以轻松的创
- *   建各种类型的饭否迷你应用，甚至是极其复杂的支持多个账号的饭否客户端. 支持
+ *   建各种类型的 Twitter 迷你应用，甚至是极其复杂的支持多个账号的 Twitter 客户端. 支持
  *   XAuth、PIN Code 和 OAuth Callback 验证方法.
  *
  * @note
@@ -90,7 +90,7 @@
 
 	var constants = {};
 
-	constants.baseOAuthUrl = 'http://fanfou.com/oauth/';
+	constants.baseOAuthUrl = 'https://api.twitter.com/oauth/';
 
 	constants.requestTokenStorage = '__Ripple_Request_Token__';
 
@@ -225,7 +225,7 @@
 
 	var config = {
 		dumpLevel: 0, // debug 模式
-		baseAPIUrl: 'http://api.fanfou.com/',
+		baseAPIUrl: 'https://api.twitter.com/',
 		OAuthVersion: '1.0',
 		ajaxOptions: {
 			timeout: 30 * 1000, // 默认 AJAX 连接时限
@@ -1447,7 +1447,7 @@
 				options.oncomplete,
 				function(data, e) {
 					xhr.onreadystatechange = null;
-					// 如果是连接到饭否服务器的请求
+					// 如果是连接到 Twitter 服务器的请求
 					if (helpers.startsWith(e.url, constants.baseOAuthUrl) ||
 						helpers.startsWith(e.url, config.baseAPIUrl)) {
 						// 读取服务器时间

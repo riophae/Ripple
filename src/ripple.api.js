@@ -1,15 +1,15 @@
 /**
- * 饭否 API Version 1.0
- * https://github.com/FanfouAPI/FanFouAPIDoc/wiki/Apicategory
+ * Twtter API Version 1.0
+ * https://dev.twitter.com/docs/api/1.1
  *
- * @lastModified 		2012/4/20 09:00
+ * @lastModified 		2013/11/4 09:37
  */
 
 
 (function(R) {
 
 	R.config({
-		baseAPIUrl: 'http://api.fanfou.com/',
+		baseAPIUrl: 'https://api.twitter.com/',
 		OAuthVersion: '1.0',
 		htmlMode: true, // status 以 HTML 格式返回
 		liteMode: true // status 对象不含有 profile 信息
