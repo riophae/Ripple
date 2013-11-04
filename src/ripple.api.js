@@ -9,7 +9,7 @@
 (function(R) {
 
 	R.config({
-		baseAPIUrl: 'https://api.twitter.com/',
+		baseAPIUrl: 'https://api.twitter.com/1.1/',
 		OAuthVersion: '1.0',
 		htmlMode: true, // status 以 HTML 格式返回
 		liteMode: true // status 对象不含有 profile 信息

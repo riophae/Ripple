@@ -225,7 +225,7 @@
 
 	var config = {
 		dumpLevel: 0, // debug 模式
-		baseAPIUrl: 'https://api.twitter.com/',
+		baseAPIUrl: 'https://api.twitter.com/1.1/',
 		OAuthVersion: '1.0',
 		ajaxOptions: {
 			timeout: 30 * 1000, // 默认 AJAX 连接时限
