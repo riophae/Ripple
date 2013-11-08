@@ -1903,7 +1903,7 @@
 			return true;
 		}
 
-		var action = config.baseAPIUrl + options.action + '.json';
+		var action = (options.baseAPIUrl || config.baseAPIUrl) + options.action + '.json';
 		var method = options.method = options.method.toUpperCase();
 		var argsProcessor = options.argsProcessor || Account.argsProcessor;
 		var urlProcessor = options.urlProcessor || Account.urlProcessor;
