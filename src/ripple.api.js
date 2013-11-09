@@ -143,6 +143,7 @@
 		name: 'uploadPhoto',
 		action: 'statuses/update_with_media',
 		method: 'POST',
+		urlEncoded: false,
 		argsProcessor: completeTweetParams
 	}, { success: _processTweet });
 
@@ -547,7 +548,7 @@
 
 	// https://dev.twitter.com/docs/api/1.1/get/lists/list
 	N({
-		name: 'getListsList',
+		name: 'getLists',
 		action: 'lists/list',
 		method: 'GET'
 	});
@@ -560,582 +561,263 @@
 		argsProcessor: completeTweetParams
 	}, { success: _processTweets });
 
-
-	/* Saved Searches */
-
-
-	/* Places & Geo */
-
-
-	/* Trends */
-
-
-	/* Spam Reporting */
-
-
-	/* Help */
-
-
-	/* Statuses */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.update
+	// https://dev.twitter.com/docs/api/1.1/post/lists/members/destroy
 	N({
-		name: 'postStatus',
-		action: 'statuses/update',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweet });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.destroy
-	N({
-		name: 'destroyStatus',
-		action: 'statuses/destroy',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweet });
-
-	N({
-		name: 'replyStatus',
-		packer: function(params) {
-			var reply = {
-				status: params.status,
-				in_reply_to_status_id: params.statusId,
-				in_reply_to_user_id: params.userId
-			};
-			var ajax_options = {
-				success: function(status) {
-					return processTweet('reply_status', status);
-				}
-			};
-			return this.postStatus(reply).setupAjax(ajax_options);
-		}
-	});
-
-	N({
-		name: 'repostStatus',
-		packer: function(params) {
-			var repost = {
-				status: params.status,
-				repost_status_id: params.statusId
-			};
-			var ajax_options = {
-				success: function(status) {
-					return processTweet('repost_status', status);
-				}
-			};
-			return this.postStatus(repost).setupAjax(ajax_options);
-		}
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.show
-	N({
-		name: 'showStatus',
-		action: 'statuses/show',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweet });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.mentions
-	N({
-		name: 'getMentions',
-		action: 'statuses/mentions',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.replies
-	N({
-		name: 'getReplies',
-		action: 'statuses/replies',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.home-timeline
-	N({
-		name: 'getHomeTimeline',
-		action: 'statuses/home_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.user-timeline
-	N({
-		name: 'getUserTimeline',
-		action: 'statuses/user_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.context-timeline
-	N({
-		name: 'getContextTimeline',
-		action: 'statuses/context_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.public-timeline
-	N({
-		name: 'getPublicTimeline',
-		action: 'statuses/public_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.friends
-	N({
-		name: 'getFriendList',
-		action: 'statuses/friends',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/statuses.followers
-	N({
-		name: 'getFollowerList',
-		action: 'statuses/followers',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-
-	/* Photos */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/photos.upload
-	N({
-		name: 'postPhoto',
-		action: 'photos/upload',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	}, {
-		urlEncoded: false,
-		success: _processTweet
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/photos.user-timeline
-	N({
-		name: 'getPhotoTimeline',
-		action: 'photos/user_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
-
-
-	/* Direct Messages */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/direct-messages.new
-	N({
-		name: 'postDirectMessage',
-		action: 'direct_messages/new',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/direct-messages.destroy
-	N({
-		name: 'destroyDirectMessage',
-		action: 'direct_messages/destroy',
+		name: 'removeMemberFromList',
+		action: 'lists/members/destroy',
 		method: 'POST'
 	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/direct-messages.inbox
+	// https://dev.twitter.com/docs/api/1.1/get/lists/memberships
 	N({
-		name: 'showInbox',
-		action: 'direct_messages/inbox',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/direct-messages.sent
-	N({
-		name: 'showOutbox',
-		action: 'direct_messages/sent',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/direct-messages.conversation
-	N({
-		name: 'showDirectMessageConversation',
-		action: 'direct_messages/conversation',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/direct-messages.conversation-list
-	N({
-		name: 'getDirectMessageConversationList',
-		action: 'direct_messages/conversation_list',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-
-	/* Friends */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friends.ids
-	N({
-		name: 'getFriendIdList',
-		action: 'friends/ids',
+		name: 'getListsListByUser',
+		action: 'lists/memberships',
 		method: 'GET'
 	});
 
-
-	/* Followers */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/followers.ids
+	// https://dev.twitter.com/docs/api/1.1/get/lists/subscribers
 	N({
-		name: 'getFollowerIdList',
-		action: 'followers/ids',
+		name: 'getListSubscribers',
+		action: 'lists/subscribers',
 		method: 'GET'
 	});
 
-
-	/* Friendships */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.create
+	// https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/create
 	N({
-		name: 'addFriend',
-		action: 'friendships/create',
-		method: 'POST',
-		argsProcessor: completeTweetParams
+		name: 'subscribeToList',
+		action: 'lists/subscribers/create',
+		method: 'POST'
 	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.destroy
+	// https://dev.twitter.com/docs/api/1.1/get/lists/subscribers/show
 	N({
-		name: 'removeFriend',
-		action: 'friendships/destroy',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.accept
-	N({
-		name: 'acceptFriend',
-		action: 'friendships/accept',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.deny
-	N({
-		name: 'rejectFriend',
-		action: 'friendships/deny',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.exists
-	N({
-		name: 'isFollowing',
-		action: 'friendships/exists',
-		method: 'GET',
-		argsProcessor: function(a, b) {
-			var params = {
-				user_a: a,
-				user_b: b
-			};
-			return params;
-		}
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.requests
-	N({
-		name: 'getFriendRequests',
-		action: 'friendships/requests',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/friendships.show
-	N({
-		name: 'showRelationship',
-		action: 'friendships/show',
+		name: 'showIfIsSubscriber',
+		action: 'lists/subscribers/show',
 		method: 'GET'
 	});
 
+	// https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy
 	N({
-		name: 'showRelationshipById',
-		packer: function(source, target) {
-			var params = {
-				source_id: source,
-				target_id: target
-			};
-			return this.showRelationship(params);
-		}
+		name: 'unsubscribeToList',
+		action: 'lists/subscribers/destroy',
+		method: 'POST'
 	});
 
+	// https://dev.twitter.com/docs/api/1.1/post/lists/members/create_all
 	N({
-		name: 'showRelationshipByLoginName',
-		packer: function(source, target) {
-			var params = {
-				source_login_name: source,
-				target_login_name: target
-			};
-			return this.showRelationship(params);
-		}
+		name: 'addAllMembersToList',
+		action: 'lists/members/create_all',
+		method: 'POST'
 	});
 
-	/* Blocks */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/blocks.create
+	// https://dev.twitter.com/docs/api/1.1/get/lists/members/show
 	N({
-		name: 'createBlock',
-		action: 'blocks/create',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/blocks.destroy
-	N({
-		name: 'destroyBlock',
-		action: 'blocks/destroy',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/blocks.exists
-	N({
-		name: 'isBlocking',
-		action: 'blocks/exists',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/blocks.blocking
-	N({
-		name: 'getBlockingList',
-		action: 'blocks/blocking',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/blocks.ids
-	N({
-		name: 'getBlockingIdList',
-		action: 'blocks/ids',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-
-	/* Favorites */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/favorites
-	N({
-		name: 'getFavorites',
-		action: 'favorites/{:id}',
-		method: 'GET',
-		argsProcessor: function(params) {
-			params.id = params.id || this.id;
-			return completeTweetParams(params);
-		},
-		urlProcessor: idReplacer
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/favorites.create
-	N({
-		name: 'addFavorite',
-		action: 'favorites/create/{:id}',
-		method: 'POST',
-		argsProcessor: completeTweetParams,
-		urlProcessor: idReplacer
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/favorites.destroy
-	N({
-		name: 'removeFavorite',
-		action: 'favorites/destroy/{:id}',
-		method: 'POST',
-		argsProcessor: completeTweetParams,
-		urlProcessor: idReplacer
-	});
-
-
-	/* Trends */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/trends.list
-	N({
-		name: 'getTrends',
-		action: 'trends/list',
+		name: 'showIfIsMemberOfList',
+		action: 'lists/members/show',
 		method: 'GET'
 	});
 
-
-	/* Search */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/search.public-timeline
+	// https://dev.twitter.com/docs/api/1.1/get/lists/members
 	N({
-		name: 'searchPublicTimeline',
-		action: 'search/public_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
+		name: 'getListMembers',
+		action: 'lists/members',
+		method: 'GET'
+	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/search.user-timeline
+	// https://dev.twitter.com/docs/api/1.1/post/lists/members/create
 	N({
-		name: 'searchUserTimeline',
-		action: 'search/user_timeline',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
+		name: 'addMemberToList',
+		action: 'lists/members/create',
+		method: 'POST'
+	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/search.users
+	// https://dev.twitter.com/docs/api/1.1/post/lists/destroy
 	N({
-		name: 'searchUser',
-		action: 'search/users',
+		name: 'deleteList',
+		action: 'lists/destroy',
+		method: 'POST'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/post/lists/update
+	N({
+		name: 'updateList',
+		action: 'lists/update',
+		method: 'POST'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/post/lists/create
+	N({
+		name: 'createList',
+		action: 'lists/create',
+		method: 'POST'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/lists/show
+	N({
+		name: 'getList',
+		action: 'lists/show',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/lists/subscriptions
+	N({
+		name: 'getSubscribedLists',
+		action: 'lists/subscriptions',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/post/lists/members/destroy_all
+	N({
+		name: 'removeMembersFromList',
+		action: 'lists/members/destroy_all',
+		method: 'POST'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/lists/ownerships
+	N({
+		name: 'getOwnedLists',
+		action: 'lists/ownerships',
 		method: 'GET'
 	});
 
 
 	/* Saved Searches */
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/saved-searches.show
-	N({
-		name: 'showSavedSearch',
-		action: 'saved_searches/show',
-		method: 'GET'
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/saved-searches.list
+	// https://dev.twitter.com/docs/api/1.1/get/saved_searches/list
 	N({
 		name: 'getSavedSearches',
 		action: 'saved_searches/list',
 		method: 'GET'
 	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/saved-searches.destroy
+	// https://dev.twitter.com/docs/api/1.1/get/saved_searches/show/%3Aid
 	N({
-		name: 'destroySavedSearch',
-		action: 'saved_searches/destroy',
-		method: 'POST'
+		name: 'showSavedSearch',
+		action: 'saved_searches/show/{:id}',
+		method: 'GET',
+		urlProcessor: idReplacer
 	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/saved-searches.create
+	// https://dev.twitter.com/docs/api/1.1/post/saved_searches/create
 	N({
 		name: 'createSavedSearch',
 		action: 'saved_searches/create',
 		method: 'POST'
 	});
 
-
-	/* Users */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.show
+	// https://dev.twitter.com/docs/api/1.1/post/saved_searches/destroy/%3Aid
 	N({
-		name: 'showUser',
-		action: 'users/show',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.tag-list
-	N({
-		name: 'getTagList',
-		action: 'users/tag_list',
-		method: 'GET'
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.friends
-	N({
-		name: 'getLatestLoggedFriends',
-		action: 'users/friends',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.followers
-	N({
-		name: 'getLatestLoggedFollowers',
-		action: 'users/followers',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.cancel-recommendation
-	N({
-		name: 'cancelRecommendation',
-		action: '2/users/cancel_recommendation',
+		name: 'removeSavedSearch',
+		action: 'saved_searches/destroy/{:id}',
 		method: 'POST',
-		argsProcessor: completeTweetParams
+		urlProcessor: idReplacer
 	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.recommendation
+
+	/* Places & Geo */
+
+	// https://dev.twitter.com/docs/api/1.1/get/geo/id/%3Aplace_id
 	N({
-		name: 'getRecommendations',
-		action: '2/users/recommendation',
+		name: 'getPlaceInformation',
+		action: 'geo/id/{:place_id}',
 		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/users.tagged
-	N({
-		name: 'getTaggedUsers',
-		action: 'users/tagged',
-		method: 'GET',
-		argsProcessor: completeTweetParams
-	});
-
-
-	/* Account */
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.notification
-	N({
-		name: 'getNotification',
-		action: 'account/notification',
-		method: 'GET'
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.rate-limit-status
-	N({
-		name: 'getRateLimit',
-		action: 'account/rate_limit_status',
-		method: 'GET'
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.update-profile
-	N({
-		name: 'updateProfile',
-		action: 'account/update_profile',
-		method: 'POST',
-		argsProcessor: completeTweetParams
-	});
-
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.update-profile-image
-	N({
-		name: 'updateAvatar',
-		action: 'account/update_profile_image',
-		method: 'POST',
-		argsProcessor: function(params) {
-			if (! H.isObject(params)) {
-				params = { image: params };
-			}
-			completeTweetParams(params);
-			return params;
+		urlProcessor: function(url, params) {
+			return url.replace('{:place_id}, params.place_id');
 		}
-	}, { urlEncoded: false });
+	});
 
-	//https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.notify-num
+	// https://dev.twitter.com/docs/api/1.1/get/geo/reverse_geocode
 	N({
-		name: 'getNotifyNum',
-		action: 'account/notify_num',
+		name: 'reverseGeocode',
+		action: 'geo/reverse_geocode',
 		method: 'GET'
 	});
 
-	//https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.update-notify-num
+	// https://dev.twitter.com/docs/api/1.1/get/geo/search
 	N({
-		name: 'updateNotifyNum',
-		action: 'account/update_notify_num',
+		name: 'searchPlaces',
+		action: 'geo/search',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/geo/similar_places
+	N({
+		name: 'searchSimilarPlaces',
+		action: 'geo/similar_places',
+		method: 'GET'
+	});
+
+
+	/* Trends */
+
+	// https://dev.twitter.com/docs/api/1.1/get/trends/place
+	N({
+		name: 'getTrendsForPlace',
+		action: 'trends/place',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/trends/available
+	N({
+		name: 'getAvailableLocations',
+		action: 'trends/available',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/trends/closest
+	N({
+		name: 'getClosestLocation',
+		action: 'trends/closest',
+		method: 'GET'
+	});
+
+
+	/* Spam Reporting */
+
+	// https://dev.twitter.com/docs/api/1.1/post/users/report_spam
+	N({
+		name: 'reportSpam',
+		action: 'users/report_spam',
 		method: 'POST'
 	});
 
-	// https://github.com/FanfouAPI/FanFouAPIDoc/wiki/account.verify-credentials
+
+	/* Help */
+
+	// https://dev.twitter.com/docs/api/1.1/get/help/configuration
 	N({
-		name: 'verify',
-		action: 'account/verify_credentials',
-		method: 'POST',
-		argsProcessor: completeTweetParams
+		name: 'getConfiguration',
+		action: 'help/configuration',
+		method: 'GET'
 	});
+
+	//  https://dev.twitter.com/docs/api/1.1/get/help/languages
+	N({
+		name: 'getSupportedLanguages',
+		action: 'help/languages'.
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/help/privacy
+	N({
+		name: 'getPrivacyPolicy',
+		action: 'help/privacy',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/help/tos
+	N({
+		name: 'getTermsOfService',
+		action: 'help/tos',
+		method: 'GET'
+	});
+
+	// https://dev.twitter.com/docs/api/1.1/get/application/rate_limit_status
+	N({
+		name: 'getRateLimitStatus',
+		action: 'application/rate_limit_status',
+		method: 'GET'
+	});
+
 
 })(Ripple);
