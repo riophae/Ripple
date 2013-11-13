@@ -11,31 +11,31 @@
 	R.config({
 		baseAPIUrl: 'https://api.twitter.com/1.1/',
 		OAuthVersion: '1.0',
-		htmlMode: true, // status 以 HTML 格式返回
-		liteMode: true // status 对象不含有 profile 信息
+		include_entities: true,
+		trim_user: false
 	});
 
 	var H = R.helpers,
-			E = R.events,
-			G = R.getConfig,
-			N = R.registerAPI;
+		E = R.events,
+		G = R.getConfig,
+		N = R.registerAPI;
 
 	function completeTweetParams(params) {
 		params = params || {};
-		if (G('liteMode')) {
-			params.mode = params.mode || 'lite';
+		if (params.include_entities === undefined) {
+			params.include_entities = G('include_entities');
 		}
-		if (G('htmlMode')) {
-			params.format = params.format || 'html';
+		if (params.trim_user === undefined) {
+			params.trim_user = G('trim_user');
 		}
 		return params;
 	}
 
-	function processTweet(event_type, status) {
+	function processTweet(event_type, tweet) {
 		var event = { actionType: event_type };
-		status = E.triggerWith(this, 'process_status', status, event);
-		status = E.triggerWith(this, event_type, status, event);
-		return status;
+		tweet = E.triggerWith(this, 'process_tweet', tweet, event);
+		tweet = E.triggerWith(this, event_type, tweet, event);
+		return tweet;
 	}
 
 	function processTweets(event_type, statuses) {
@@ -107,7 +107,7 @@
 	// https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid
 	N({
 		name: 'showTweet',
-		action: 'statuses/show.json',
+		action: 'statuses/show',
 		method: 'GET',
 		argsProcessor: completeTweetParams
 	}, { success: _processTweet });
@@ -124,7 +124,7 @@
 	// https://dev.twitter.com/docs/api/1.1/post/statuses/update
 	N({
 		name: 'postTweet',
-		action: 'statuses/update.json',
+		action: 'statuses/update',
 		method: 'POST',
 		argsProcessor: completeTweetParams
 	}, { success: _processTweet });
@@ -132,7 +132,7 @@
 	// https://dev.twitter.com/docs/api/1.1/post/statuses/retweet/%3Aid
 	N({
 		name: 'retweet',
-		action: 'statuses/retweet/{:id}.json',
+		action: 'statuses/retweet/{:id}',
 		method: 'POST',
 		argsProcessor: completeTweetParams,
 		urlProcessor: idReplacer
@@ -143,9 +143,11 @@
 		name: 'uploadPhoto',
 		action: 'statuses/update_with_media',
 		method: 'POST',
-		urlEncoded: false,
 		argsProcessor: completeTweetParams
-	}, { success: _processTweet });
+	}, {
+		urlEncoded: false,
+		success: _processTweet
+	});
 
 	// https://dev.twitter.com/docs/api/1.1/get/statuses/oembed
 	N({
@@ -224,7 +226,7 @@
 		action: 'direct_messages',
 		method: 'GET',
 		argsProcessor: completeTweetParams
-	});
+	}, { success: _processTweets });
 
 	// https://dev.twitter.com/docs/api/1.1/get/direct_messages/sent
 	N({
@@ -232,14 +234,14 @@
 		action: 'direct_messages/sent',
 		method: 'GET',
 		argsProcessor: completeTweetParams
-	});
+	}, { success: _processTweets });
 
 	// https://dev.twitter.com/docs/api/1.1/get/direct_messages/show
 	N({
 		name: 'showDirectMessage',
 		action: 'direct_messages/show',
 		method: 'GET'
-	});
+	}, { success: _processTweet });
 
 	// https://dev.twitter.com/docs/api/1.1/post/direct_messages/destroy
 	N({
@@ -247,14 +249,14 @@
 		action: 'direct_messages/destroy',
 		method: 'POST',
 		argsProcessor: completeTweetParams
-	});
+	}, { success: _processTweet });
 
 	// https://dev.twitter.com/docs/api/1.1/post/direct_messages/new
 	N({
 		name: 'createDirectMessage',
 		action: 'direct_messages/new',
 		method: 'POST'
-	});
+	}, { success: _processTweet });
 
 
 	/* Friends & Followers */
@@ -794,7 +796,7 @@
 	//  https://dev.twitter.com/docs/api/1.1/get/help/languages
 	N({
 		name: 'getSupportedLanguages',
-		action: 'help/languages'.
+		action: 'help/languages',
 		method: 'GET'
 	});
 

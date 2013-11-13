@@ -127,7 +127,7 @@
 	/* 临时事件名称 */
 	constants.OneTimeEventType = '_one_time_event_';
 
-	constants.systemEventTypes = 'create_account process_status'.split(' ');
+	constants.systemEventTypes = 'create_account process_tweet'.split(' ');
 
 	/* 服务器端响应类型值 */
 	constants.responseTypes = {
