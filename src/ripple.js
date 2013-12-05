@@ -1887,6 +1887,14 @@
 	/* 处理 Url */
 	Account.urlProcessor = function(x) { return x; }
 
+	Account.prototype.getConsumerKey = function() {
+		return (this.consumer || consumer).consumer_key;
+	}
+
+	Account.prototype.getConsumerSecret = function() {
+		return (this.consumer || consumer).consumer_secret;
+	}
+
 	var registeredAPIList = [];
 
 	var registerAPI = function(options, default_ajax_options) {
@@ -1933,14 +1941,14 @@
 				action: urlProcessor(action, parameters),
 				method: method,
 				parameters: {
-					oauth_consumer_key: consumer.consumer_key,
+					oauth_consumer_key: self.getConsumerKey(),
 					oauth_token: self.accessToken.oauth_token,
 					oauth_signature_method: constants.signMethod,
 					oauth_version: config.OAuthVersion
 				}
 			};
 			var accessor = {
-				consumerSecret: consumer.consumer_secret,
+				consumerSecret: self.getConsumerSecret(),
 				tokenSecret: this.accessor.tokenSecret
 			};
 
@@ -2064,6 +2072,9 @@
 		getConfig: function(name) {
 			return config[name];
 		},
+		getConstant: function(name) {
+			return constants[name];
+		},
 
 		/* 网址缩短服务 */
 		shorten: shorten,
@@ -2091,5 +2102,30 @@
 	// 便捷写法
 	if (Global.R === undefined) Global.R = Ripple;
 	if (Global.O_o === undefined) Global.O_o = Ripple;
+
+	Ripple.createGhostRipple = function() {
+		var RippleProxy = { };
+		function createProxy(target, origin) {
+			Object.keys(origin).forEach(function(key) {
+				if (helpers.isPlainObject(origin[key])) {
+					target[key] = { };
+					return createProxy(target[key], origin[key]);
+				}
+				if (! helpers.isFunction(origin[key]))
+					return;
+				target[key] = function(_consumer) {
+					var args = slice.call(arguments, 1);
+					var original_consumer = consumer;
+					consumer = _consumer;
+					var ret = origin[key].apply(origin[key], args);
+					consumer = original_consumer;
+					return ret;
+				}
+			})
+		}
+		createProxy(RippleProxy, Ripple);
+		return RippleProxy;
+	}
+
 
 })(this);
