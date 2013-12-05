@@ -172,7 +172,10 @@
 		action: 'search/tweets',
 		method: 'GET',
 		argsProcessor: completeTweetParams
-	}, { success: _processTweets });
+	}, { success: function(data, event) {
+		processTweets.call(this, event.actionType, data.statuses);
+		return data;
+	} });
 
 
 	/* Streaming */
