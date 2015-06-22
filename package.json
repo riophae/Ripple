@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/riophae/Ripple/issues"
   },
-  "homepage": "https://github.com/riophae/Ripple#readme"
+  "homepage": "https://github.com/riophae/Ripple#readme",
+  "dependencies": {
+    "xhr2": "^0.1.2"
+  }
 }

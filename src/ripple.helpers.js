@@ -1,3 +1,5 @@
+var XMLHttpRequest = require('xhr2');
+
 var Ripple = {
 	helpers: {}
 };
@@ -51,7 +53,8 @@ Deferred.prototype = {
 	},
 
 	promise: function (target) {
-		var tail = d = this;
+		var tail, d;
+		tail = d = this;
 		var methods = Deferred.promiseMethods;
 		target = target || {};
 		target._getTail = function() {

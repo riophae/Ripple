@@ -65,6 +65,8 @@
 	 ** Consumer **
 */
 
+var XMLHttpRequest = require('xhr2');
+
 var consumer = {
 	consumer_key: '',
 	consumer_secret: ''
