@@ -1,0 +1,22 @@
+{
+  "name": "node-ripple",
+  "version": "0.0.1",
+  "description": "JavaScript SDK for Twitter",
+  "main": "src/ripple.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riophae/Ripple.git"
+  },
+  "keywords": [
+    "['twitter']"
+  ],
+  "author": "Riphae Lee <riophaelee@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/riophae/Ripple/issues"
+  },
+  "homepage": "https://github.com/riophae/Ripple#readme"
+}

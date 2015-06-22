@@ -6,19 +6,19 @@
  */
 
 
-(function(R) {
+module.exports = function(Ripple) {
 
-	R.config({
+	Ripple.config({
 		baseAPIUrl: 'https://api.twitter.com/1.1/',
 		OAuthVersion: '1.0',
 		include_entities: true,
 		trim_user: false
 	});
 
-	var H = R.helpers,
-		E = R.events,
-		G = R.getConfig,
-		N = R.registerAPI;
+	var H = Ripple.helpers,
+		E = Ripple.events,
+		G = Ripple.getConfig,
+		N = Ripple.registerAPI;
 
 	function completeTweetParams(params) {
 		params = params || {};
@@ -824,5 +824,5 @@
 		method: 'GET'
 	});
 
-
-})(Ripple);
+	return Ripple;
+};
