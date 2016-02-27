@@ -1787,7 +1787,7 @@
 	/* 通过 Callback 获取 Access Token */
 	authorize.withCallbackUrl = function(callback_url) {
 		return authorize.
-			byPINCodeOrCallbackUrl(callback_url).
+			withPINCodeOrCallbackUrl(callback_url).
 			next(function(args) {
 				Ripple.cache.set(constants.requestTokenStorage, args.request_token);
 				return args.auth_url;
