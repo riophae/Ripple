@@ -1713,16 +1713,6 @@
 		}
 	});
 
-	shorten.register({
-		name: 'yep.it',
-		url: 'http://yep.it/api.php',
-		argsProcessor: function(long_url) {
-			return {
-				url: long_url
-			};
-		}
-	});
-
 
 	/*
 		 ** OAuth 验证方法 **
